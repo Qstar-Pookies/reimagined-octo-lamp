@@ -1,6 +1,6 @@
 @echo off
 cd /d "%~dp0"
-title Root.Skid [PAID] Menu
+title Toast Menu [PAID]
 cls
 
 echo ================================
