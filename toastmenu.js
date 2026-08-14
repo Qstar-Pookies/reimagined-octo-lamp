@@ -10823,7 +10823,6 @@ menuButton("Clear Trap List", () => {
         menuToggle("Drain Money Gun", { onUpdate: () => gunFire("drainG", 0.2, t => mmR.addMoney(t, -1000000)), toolTip: "Hold grip + trigger to drain a player's money." }),
         menuToggle("TP To Void Gun", { onUpdate: () => gunFire("voidG", 0.2, t => mmR.teleport(t, [-9999999, -9999999, -9999999])), toolTip: "Hold grip + trigger to send a player to the void." }),
         menuToggle("Kidnap Gun", { onUpdate: () => gunFire("kidnapG", 0.2, t => mmR.teleport(t, myPosArr())), toolTip: "Hold grip + trigger to teleport a player to you." }),
-        menuToggle("Kick Gun", { onUpdate: () => gunFire("kickG", 0, t => mmR.kick(t)), toolTip: "Aim at a player and hold grip + trigger to instantly kick them." }),
         menuToggle("Rainbow Gun", { onUpdate: () => gunFire("rainbowG", 0.05, t => { _gunRainbowHue = (_gunRainbowHue + 0.05) % 1; mmR.setColorHSV(t, 0.5, _gunRainbowHue, 1, 1); }), toolTip: "Hold grip + trigger to cycle a player's color." }),
         menuToggle("Strobe Gun", { onUpdate: () => gunFire("strobeG", 0.1, t => mmR.setHide(t, (frameCount % 4) < 2)), toolTip: "Hold grip + trigger to strobe a player's visibility." }),
         menuToggle("Hide Gun", { onUpdate: () => gunFire("hideG", 0.2, t => mmR.setHide(t, true)), toolTip: "Hold grip + trigger to hide a player." }),
@@ -10842,6 +10841,7 @@ menuButton("Clear Trap List", () => {
 
     ]));
     TEMPLATE_MENU_BUTTONS.push(menuAddTo("overpowered", [
+        menuToggle("Kick Gun", { onUpdate: () => gunFire("kickG", 0, t => mmR.kick(t)), toolTip: "Aim at a player and hold grip + trigger to instantly kick them." }),
         menuToggle("Rainbow All", { onUpdate: () => allFire("rainbowAll", 0.08, p => { _gunRainbowHue = (_gunRainbowHue + 0.02) % 1; mmR.setColorHSV(p, 0.5, _gunRainbowHue, 1, 1); }), toolTip: "Hold right grip to rainbow everyone." }),
         menuToggle("Strobe All", { onUpdate: () => allFire("strobeAll", 0.1, p => mmR.setHide(p, (frameCount % 4) < 2)), toolTip: "Hold right grip to strobe everyone." }),
         menuButton("Jelly All", () => forAllPlayers(p => mmR.setJelly(p, 9999, 10)), "Jelly every other player."),
@@ -12424,6 +12424,26 @@ menuButton("Clear Trap List", () => {
                 buttonPressedColor: [0.95, 0.35, 0.45, 0.95],
                 textGradientEnabled: true, textGradientSpeed: 2.6,
                 textGradientDarkColor: [235, 70, 40], textGradientLightColor: [255, 150, 220],
+            },
+        },
+        {
+            name: "TOAST",
+            tip: "Buttered toast. Thick orange crust outlines, warm bread panel, black text on cream pills.",
+            vars: {
+                menuOutlineColor: [0.93, 0.58, 0.06, 1], pageOutlineColor: [0.93, 0.58, 0.06, 1],
+                buttonOutlineColor: [0.42, 0.22, 0.02, 1],
+                outlineGradientBase: [0.68, 0.36, 0.02, 1], outlineGradientPeak: [1.0, 0.74, 0.22, 1],
+                pulseSpeed: 0.8,
+                bgPulseBase: [0.97, 0.78, 0.44, 0.97], bgPulsePeak: [1.0, 0.86, 0.56, 0.97],
+                bgColor: [0.98, 0.80, 0.47, 0.97],
+                menuOutlineThickness: 0.020, controlOutlineThickness: 0.010, rowOutlineThickness: 0.008,
+                cornerRoundness: 0.48,
+                rowButtonHeight: 0.072, rowButtonWidth: 0.74, rowButtonSpacing: 0.030,
+                disconnectButtonWidth: 0.60, titleWidth: 0.78, titleHeight: 0.082,
+                textColor: [0.06, 0.04, 0.01, 1], buttonColor: [1.0, 0.89, 0.63, 0.98],
+                buttonPressedColor: [0.94, 0.62, 0.12, 0.98],
+                textGradientEnabled: false, textGradientSpeed: 1.0,
+                textGradientDarkColor: [40, 22, 4], textGradientLightColor: [90, 50, 10],
             },
         },
     ];
