@@ -2,7 +2,23 @@
 cd /d "%~dp0"
 title Root.Skid [PAID] Menu
 cls
+
+echo ================================
+echo     Toast Menu [PAID]
+echo ================================
 echo.
-frida -l ac_bridge.js -l Root.Skid.js "EACLauncher.exe"
+echo Make sure you are IN THE GAME before pressing enter thing
 echo.
-pause
+echo press enter when you are reading
+echo.
+
+pause > nul
+
+echo.
+echo hold up...
+echo.
+frida -l ac_bridge.js -l toastmenu.js "EACLauncher.exe"
+
+echo.
+echo just press anything
+pause > nul
