@@ -9,7 +9,7 @@ echo ================================
 echo.
 echo Make sure you are IN THE GAME before pressing enter thing
 echo.
-echo press enter when you are reading
+echo press enter when you are ready
 echo.
 
 pause > nul
