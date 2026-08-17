@@ -1,3 +1,14 @@
+// Silence every console channel before anything else runs. This is patched on
+// globalThis rather than shadowed with a local binding so it also covers the
+// il2cpp bridge, which calls globalThis.console.log directly.
+try {
+    const _noop = function () { };
+    for (const _k of ["log", "error", "warn", "info", "debug", "trace", "dir", "table", "group", "groupEnd", "count", "time", "timeEnd", "assert"]) {
+        try { globalThis.console[_k] = _noop; } catch (_) { }
+    }
+}
+catch (_) { }
+
 const MENU_CREDITS = [
     { name: "Qstar", role: "made the menu" },
 ];
@@ -68,6 +79,9 @@ class ButtonInfo {
         this.toolTip = config.toolTip || "";
         this.stepDown = config.stepDown;
         this.stepUp = config.stepUp;
+        // set on favourites-page proxies so a grip-click there unfavourites the
+        // original rather than the proxy's own (prefixed) label
+        this.favKey = config.favKey;
     }
 }
 
@@ -121,240 +135,240 @@ function _winhttpGet(host, path) {
 }
 
 const EMBEDDED_SYMBOLS = {
-    il2cpp_init: "KQQobkahLcB",
-    il2cpp_init_utf16: "HqKXkewqTfz",
-    il2cpp_shutdown: "RenqjBbcOOU",
-    il2cpp_set_config_dir: "LSMvitULyFr",
-    il2cpp_set_data_dir: "OQASc_pARjh",
-    il2cpp_set_temp_dir: "MDiYOZZCYXM",
-    il2cpp_set_commandline_arguments: "NHEGNYVJBjx",
-    il2cpp_set_commandline_arguments_utf16: "qeqdHCjpknI",
-    il2cpp_set_config_utf16: "uJyfzyXTlHl",
-    il2cpp_set_config: "oOI_EUcqZYj",
-    il2cpp_set_memory_callbacks: "HEpXvtbwNAP",
-    il2cpp_memory_pool_set_region_size: "yopnKyXqWcx",
-    il2cpp_memory_pool_get_region_size: "gbZsfqnOrui",
-    il2cpp_get_corlib: "eUPqbGVaXIY",
-    il2cpp_add_internal_call: "nEi_ftAVlXZ",
-    il2cpp_resolve_icall: "wRphLKlGyAK",
-    il2cpp_alloc: "zlbROoiarnm",
-    il2cpp_free: "kYLqUQDUlkF",
-    il2cpp_array_class_get: "YasSFVLtEvu",
-    il2cpp_array_length: "YnIqjPAeKMS",
-    il2cpp_array_get_byte_length: "mXZAasnVdFa",
-    il2cpp_array_new: "pgdSUYkWMJr",
-    il2cpp_array_new_specific: "UJvDVbN_IGy",
-    il2cpp_array_new_full: "PoomZEJIdR_",
-    il2cpp_bounded_array_class_get: "R_riMvyZSZn",
-    il2cpp_array_element_size: "_HwFZwIsNj_",
-    il2cpp_assembly_get_image: "_uaqbSnBXIa",
-    il2cpp_class_for_each: "QUZQwDuenGT",
-    il2cpp_class_enum_basetype: "_EvpdArAmnF",
-    il2cpp_class_is_inited: "AtS_MTSlSwd",
-    il2cpp_class_is_generic: "YEcIFRlDeGe",
-    il2cpp_class_is_inflated: "flVXyTHWACz",
-    il2cpp_class_is_assignable_from: "fIiyiwqBClg",
-    il2cpp_class_is_subclass_of: "OZMxZxTOhcn",
-    il2cpp_class_has_parent: "yEuFNrdSqCe",
-    il2cpp_class_from_il2cpp_type: "XaFepOIOZZc",
-    il2cpp_class_from_name: "nYeRoAQlLVk",
-    il2cpp_class_from_system_type: "UgYuZCiuHZE",
-    il2cpp_class_get_element_class: "UDbZbvxzblI",
-    il2cpp_class_get_events: "okrcwwrWSHY",
-    il2cpp_class_get_fields: "rOgtHbCJOHy",
-    il2cpp_class_get_nested_types: "QZIoMgVvjf_",
-    il2cpp_class_get_interfaces: "XFZFz_darUM",
-    il2cpp_class_get_properties: "NCvtXQhqgTL",
-    il2cpp_class_get_property_from_name: "k_DFJTckRvB",
-    il2cpp_class_get_field_from_name: "MPOHSfxIBNp",
-    il2cpp_class_get_methods: "TgisPILmYXu",
-    il2cpp_class_get_method_from_name: "RGutFUB_gvX",
-    il2cpp_class_get_name: "HbwEb_zoK_E",
-    il2cpp_type_get_name_chunked: "MtMfviaYRWo",
-    il2cpp_class_get_namespace: "QVzdiSaisXV",
-    il2cpp_class_get_parent: "NKxjgk_dOiY",
-    il2cpp_class_get_declaring_type: "WKn_tKspYDy",
-    il2cpp_class_instance_size: "fTBdTeJRpKu",
-    il2cpp_class_num_fields: "nx_PgGdNUKz",
-    il2cpp_class_is_valuetype: "gzFfF_XYXBu",
-    il2cpp_class_value_size: "pTNZxpZJzic",
-    il2cpp_class_is_blittable: "UggviuhnaNc",
-    il2cpp_class_get_flags: "pKz_mGx_oej",
-    il2cpp_class_is_abstract: "vHwyXOZKmqk",
-    il2cpp_class_is_interface: "LtQIujXiPQI",
-    il2cpp_class_array_element_size: "HfkZSFpBwVF",
-    il2cpp_class_from_type: "nTTXqbPqucV",
-    il2cpp_class_get_type: "cNgaIdXPQVp",
-    il2cpp_class_get_type_token: "MfPZtmYMVJn",
-    il2cpp_class_has_attribute: "xwXiFrhQjkH",
-    il2cpp_class_has_references: "LZYmAOcldok",
-    il2cpp_class_is_enum: "irRAPcuPmZd",
-    il2cpp_class_get_image: "vvMARHqAeKl",
-    il2cpp_class_get_assemblyname: "UpSR_YaJCtl",
-    il2cpp_class_get_rank: "ccP_DaAoAru",
-    il2cpp_class_get_data_size: "EYGoknksQKB",
-    il2cpp_class_get_static_field_data: "kDZkxxdBLRc",
-    il2cpp_stats_dump_to_file: "kGSJKKZhuwW",
-    il2cpp_stats_get_value: "EBgPcrpaNMo",
-    il2cpp_domain_get: "ewITDoKjSbY",
-    il2cpp_domain_assembly_open: "AGoNHOgrGZj",
-    il2cpp_domain_get_assemblies: "KAuvyGCWZal",
-    il2cpp_raise_exception: "YWVXZiZqqUP",
-    il2cpp_exception_from_name_msg: "kZYLXYDRUlK",
-    il2cpp_get_exception_argument_null: "mtQzxruDpFS",
-    il2cpp_format_exception: "VPxbmGVrieI",
-    il2cpp_format_stack_trace: "BSHBqixyVC_",
-    il2cpp_unhandled_exception: "kGnscLJFxWF",
-    il2cpp_native_stack_trace: "FAQEyNshWBV",
-    il2cpp_field_get_flags: "aIXtWVyRPQW",
-    il2cpp_field_get_from_reflection: "QkLqPJUzlhZ",
-    il2cpp_field_get_name: "glzjhAhskPN",
-    il2cpp_field_get_parent: "CRsxeDQDMrG",
-    il2cpp_field_get_object: "IwTOslvsHpi",
-    il2cpp_field_get_offset: "cnalSlCqicr",
-    il2cpp_field_get_type: "oaeqZmzMbDt",
-    il2cpp_field_get_value: "MFrLpulRfBU",
-    il2cpp_field_get_value_object: "bhgUuDWHJZR",
-    il2cpp_field_has_attribute: "jMGkxzAvRux",
-    il2cpp_field_set_value: "dU_MSYehzOV",
-    il2cpp_field_static_get_value: "ZZtRVbsIVYG",
-    il2cpp_field_static_set_value: "UevIyjTnuzl",
-    il2cpp_field_set_value_object: "wKDneXIwraq",
-    il2cpp_field_is_literal: "RJXGUUxQBLG",
-    il2cpp_gc_collect: "NAKEJPKirvl",
-    il2cpp_gc_collect_a_little: "aIXvAhf_yLH",
-    il2cpp_gc_start_incremental_collection: "Olgn_dzAreE",
-    il2cpp_gc_disable: "VbjzdjUCGWJ",
-    il2cpp_gc_enable: "qAcXxVcCPNu",
-    il2cpp_gc_is_disabled: "PDsRPUDxrjw",
-    il2cpp_gc_set_mode: "vdGUlFZsaHo",
-    il2cpp_gc_get_max_time_slice_ns: "ZMFQNIiOipD",
-    il2cpp_gc_set_max_time_slice_ns: "qgiMEBirTbD",
-    il2cpp_gc_is_incremental: "XIQyVRmCROd",
-    il2cpp_gc_get_used_size: "JFQDrhupaBF",
-    il2cpp_gc_get_heap_size: "pFqvtRzOERS",
-    il2cpp_gc_wbarrier_set_field: "ZUxEyxuYbPB",
-    il2cpp_gc_has_strict_wbarriers: "PjTEvhEtjoG",
-    il2cpp_gc_set_external_allocation_tracker: "EcgymmLfzzY",
-    il2cpp_gc_set_external_wbarrier_tracker: "OVpUxsCThhY",
-    il2cpp_gc_foreach_heap: "En_QnBAOPmL",
-    il2cpp_stop_gc_world: "YdNhBxnaoQh",
-    il2cpp_start_gc_world: "HjFuHFXlnwG",
-    il2cpp_gc_alloc_fixed: "ZMUitFtxhcQ",
-    il2cpp_gc_free_fixed: "Aqo_LosCYzF",
-    il2cpp_gchandle_new: "OsXzWDUIvIW",
-    il2cpp_gchandle_new_weakref: "OOzvTC_XbNd",
-    il2cpp_gchandle_get_target: "CrYrZpkeaaf",
-    il2cpp_gchandle_free: "jPWOeIVFGLS",
-    il2cpp_gchandle_foreach_get_target: "jVcLwsmctyv",
-    il2cpp_object_header_size: "LocFTyAFLoo",
-    il2cpp_array_object_header_size: "mZBrHXVqJME",
-    il2cpp_offset_of_array_length_in_array_object_header: "NVkURuXuDgR",
-    il2cpp_offset_of_array_bounds_in_array_object_header: "CBQxoBfCocx",
-    il2cpp_allocation_granularity: "KyKhsYbglYR",
-    il2cpp_unity_liveness_allocate_struct: "orfnYfFUOKN",
-    il2cpp_unity_liveness_calculation_from_root: "tdKgROncxND",
-    il2cpp_unity_liveness_calculation_from_statics: "YDEIUmHSeSs",
-    il2cpp_unity_liveness_finalize: "RltZcmgVyDa",
-    il2cpp_unity_liveness_free_struct: "GYwOvIYuVkt",
-    il2cpp_method_get_return_type: "aTFWVYLLxWn",
-    il2cpp_method_get_declaring_type: "DkcZQAIZI_s",
-    il2cpp_method_get_name: "RdKgQJfA_Fq",
-    il2cpp_method_get_from_reflection: "LqsOlPjAxRb",
-    il2cpp_method_get_object: "ZYXZxcrkrYB",
-    il2cpp_method_is_generic: "vKNzgNLPvXc",
-    il2cpp_method_is_inflated: "EQEYVVIabOE",
-    il2cpp_method_is_instance: "GvicpGfzItC",
-    il2cpp_method_get_param_count: "HNnargsOyMI",
-    il2cpp_method_get_param: "YOkFJacjdvD",
-    il2cpp_method_get_class: "AQpvtNhMywP",
-    il2cpp_method_has_attribute: "hXVXzkT_mFH",
-    il2cpp_method_get_flags: "vXQMAxPcioX",
-    il2cpp_method_get_token: "iUJ_WruDZvo",
-    il2cpp_method_get_param_name: "zYqibxkmhyQ",
-    il2cpp_property_get_flags: "xBZKrhODNqm",
-    il2cpp_property_get_get_method: "hiJheTlwyan",
-    il2cpp_property_get_set_method: "nqTbQHhXUxY",
-    il2cpp_property_get_name: "VMRnLeVZgFg",
-    il2cpp_property_get_parent: "hDREPRrrkUa",
-    il2cpp_object_get_class: "DYSSFTVys_a",
-    il2cpp_object_get_size: "tkYhNKvQzea",
-    il2cpp_object_get_virtual_method: "UQxqzJcOzGI",
-    il2cpp_object_new: "rvBzgPARXUp",
-    il2cpp_object_unbox: "usGeLgJXLXs",
-    il2cpp_value_box: "UXpYaFznhgg",
-    il2cpp_monitor_enter: "fCgrOeqKBOM",
-    il2cpp_monitor_try_enter: "yLGRpudYLBk",
-    il2cpp_monitor_exit: "zMdabSFMgua",
-    il2cpp_monitor_pulse: "XSkypOy_YfV",
-    il2cpp_monitor_pulse_all: "UWDGIMygvqE",
-    il2cpp_monitor_wait: "YLzLMHGWlVy",
-    il2cpp_monitor_try_wait: "PGHTxzaOLoL",
-    il2cpp_runtime_invoke: "zdhMZqJLmUg",
-    il2cpp_runtime_invoke_convert_args: "jhKCnWKQHVM",
-    il2cpp_runtime_class_init: "FWblMkQaNuJ",
-    il2cpp_runtime_object_init: "FounlxezYYj",
-    il2cpp_runtime_object_init_exception: "IQDCicMrAAh",
-    il2cpp_runtime_unhandled_exception_policy_set: "yeTYbBaRvhX",
-    il2cpp_string_length: "tzhsKMk_erj",
-    il2cpp_string_chars: "JbKXFKofDbk",
-    il2cpp_string_new: "HayoWStoOTy",
-    il2cpp_string_new_len: "TbXyWYRMSvr",
-    il2cpp_string_new_utf16: "ppAsBnWYob_",
-    il2cpp_string_new_wrapper: "uPXen_sQCpP",
-    il2cpp_string_intern: "pulQSbjdgGI",
-    il2cpp_string_is_interned: "SbYwzwrxQLE",
-    il2cpp_thread_current: "lKQVpyePKDk",
-    il2cpp_thread_attach: "YkLhnLonIZx",
-    il2cpp_thread_detach: "Rj_ORUfTKjy",
-    il2cpp_is_vm_thread: "liJGJwHegtr",
-    il2cpp_current_thread_walk_frame_stack: "_EZqFfVGPdv",
-    il2cpp_thread_walk_frame_stack: "JIm_rKHIojy",
-    il2cpp_current_thread_get_top_frame: "_dA_aBwYbzp",
-    il2cpp_thread_get_top_frame: "RwpqyZbVHrs",
-    il2cpp_current_thread_get_frame_at: "xJXtiGpXkXT",
-    il2cpp_thread_get_frame_at: "VVHpqqOJufn",
-    il2cpp_current_thread_get_stack_depth: "MvXKwcCFSEu",
-    il2cpp_thread_get_stack_depth: "RZWCWUquwMS",
-    il2cpp_override_stack_backtrace: "PIJvWxpPZcp",
-    il2cpp_type_get_object: "__aggEgsdVR",
-    il2cpp_type_get_type: "eSFdf_oAcwB",
-    il2cpp_type_get_class_or_element_class: "jq_ZCCwrxKF",
-    il2cpp_type_get_name: "MKrQf_BbDNm",
-    il2cpp_type_is_byref: "EpRDaYClGkl",
-    il2cpp_type_get_attrs: "pHxdxgwMdcA",
-    il2cpp_type_equals: "oQgGfpIk_Le",
-    il2cpp_type_get_assembly_qualified_name: "bJqsylwHDEZ",
-    il2cpp_type_get_reflection_name: "QuT_ZqaHeRr",
-    il2cpp_type_is_static: "vnsiHlJEMwe",
-    il2cpp_type_is_pointer_type: "DLCeNvnsSdb",
-    il2cpp_image_get_assembly: "oQuELENSelm",
-    il2cpp_image_get_name: "rCrwzAsBwWv",
-    il2cpp_image_get_filename: "vOIxvVNbrAm",
-    il2cpp_image_get_entry_point: "vJkLBOnXeAp",
-    il2cpp_image_get_class_count: "blKAcnmYlXB",
-    il2cpp_image_get_class: "ZEpVtNyyOCK",
-    il2cpp_capture_memory_snapshot: "qEnocNzysOD",
-    il2cpp_free_captured_memory_snapshot: "BNRtyQsRRxB",
-    il2cpp_set_find_plugin_callback: "NhTfN_TGsVc",
-    il2cpp_register_log_callback: "igOjhmfxSRP",
-    il2cpp_debugger_set_agent_options: "BGudxqjGPxv",
-    il2cpp_is_debugger_attached: "UjxoloeAr_l",
-    il2cpp_register_debugger_agent_transport: "RsTDRDmQChF",
-    il2cpp_debug_foreach_method: "tYtaR_wuIBG",
-    il2cpp_debug_get_method_info: "lSlzSWcZwDo",
-    il2cpp_unity_install_unitytls_interface: "JTsxuxPkKHY",
-    il2cpp_custom_attrs_from_class: "FYNAwziNHGw",
-    il2cpp_custom_attrs_from_method: "tQzmJTYLjqi",
-    il2cpp_custom_attrs_from_field: "KgGncDvQHBq",
-    il2cpp_custom_attrs_get_attr: "KwUHtQGnfjF",
-    il2cpp_custom_attrs_has_attr: "bVlbMepZwHc",
-    il2cpp_custom_attrs_construct: "UskivJNXhjm",
-    il2cpp_custom_attrs_free: "ApwGzuxX_Ay",
-    il2cpp_class_set_userdata: "EmdSjXwCQSu",
-    il2cpp_class_get_userdata_offset: "zASPdAUoGFZ",
-    il2cpp_set_default_thread_affinity: "wvEFDJGgLgG",
-    il2cpp_unity_set_android_network_up_state_func: "pQRyASQqVoh",
+    il2cpp_init: "jXIbYUVIqQP",
+    il2cpp_init_utf16: "SrSFfUYEqHk",
+    il2cpp_shutdown: "zDPIEeJmrEr",
+    il2cpp_set_config_dir: "KVBtAYWVLDN",
+    il2cpp_set_data_dir: "MDuQYO_wMRA",
+    il2cpp_set_temp_dir: "xfBpCaGNOW_",
+    il2cpp_set_commandline_arguments: "oWqODxIsxKG",
+    il2cpp_set_commandline_arguments_utf16: "MBTfFvCuFTk",
+    il2cpp_set_config_utf16: "TYrNvda_Rmb",
+    il2cpp_set_config: "nHSPbUlwQvk",
+    il2cpp_set_memory_callbacks: "GBxZNjZeAXB",
+    il2cpp_memory_pool_set_region_size: "gsdSGS_jsmw",
+    il2cpp_memory_pool_get_region_size: "riGPDU_LSnT",
+    il2cpp_get_corlib: "HmzMEMupouA",
+    il2cpp_add_internal_call: "CPItzCQzAfN",
+    il2cpp_resolve_icall: "JylsrSELKpJ",
+    il2cpp_alloc: "jtoZYzvJNeP",
+    il2cpp_free: "quqNUsWseIw",
+    il2cpp_array_class_get: "iPiUj_NnTva",
+    il2cpp_array_length: "UWkQjphkJtj",
+    il2cpp_array_get_byte_length: "Z_REplaSZkx",
+    il2cpp_array_new: "wCrbcQAhNAO",
+    il2cpp_array_new_specific: "SiIKqqOmcce",
+    il2cpp_array_new_full: "DqprWNjjxTd",
+    il2cpp_bounded_array_class_get: "HInCpZLFWLZ",
+    il2cpp_array_element_size: "JhG_JTKLgQz",
+    il2cpp_assembly_get_image: "YxluOkfhsnW",
+    il2cpp_class_for_each: "DzKibDOtmBM",
+    il2cpp_class_enum_basetype: "KcNrypGNzFJ",
+    il2cpp_class_is_inited: "zsTVDhLyzkF",
+    il2cpp_class_is_generic: "cRcqiXGM_Qx",
+    il2cpp_class_is_inflated: "sZySsJLHJEI",
+    il2cpp_class_is_assignable_from: "lJJwwBXoOvh",
+    il2cpp_class_is_subclass_of: "tRemtHGJGho",
+    il2cpp_class_has_parent: "fmJsWgEl_JB",
+    il2cpp_class_from_il2cpp_type: "GaHCGasmKjz",
+    il2cpp_class_from_name: "zhMkJHNiQKY",
+    il2cpp_class_from_system_type: "XbQigghLbFm",
+    il2cpp_class_get_element_class: "KDLMgeRoRMX",
+    il2cpp_class_get_events: "YYAKYhbxdbx",
+    il2cpp_class_get_fields: "briHjKzkjop",
+    il2cpp_class_get_nested_types: "yHNwBZKBnrR",
+    il2cpp_class_get_interfaces: "JlIl_iVIYPT",
+    il2cpp_class_get_properties: "wEkcxHcvIYt",
+    il2cpp_class_get_property_from_name: "gORVrksHTCb",
+    il2cpp_class_get_field_from_name: "yFXdzxqdjvj",
+    il2cpp_class_get_methods: "AIuMCO_m_Vr",
+    il2cpp_class_get_method_from_name: "VPGfIBxiDtr",
+    il2cpp_class_get_name: "JuPyBFEYHuX",
+    il2cpp_type_get_name_chunked: "iOpxpHbzVEU",
+    il2cpp_class_get_namespace: "uJeqnFJGFGf",
+    il2cpp_class_get_parent: "iX_tCflArVP",
+    il2cpp_class_get_declaring_type: "WtOYTHJCMjP",
+    il2cpp_class_instance_size: "PvnpfWWmFMT",
+    il2cpp_class_num_fields: "coPQWmBJLJk",
+    il2cpp_class_is_valuetype: "LtcufaRmbMv",
+    il2cpp_class_value_size: "SjnwTPBP_SB",
+    il2cpp_class_is_blittable: "DTLdNxqxRFv",
+    il2cpp_class_get_flags: "fBbDXQ_Drcm",
+    il2cpp_class_is_abstract: "ZEXVKGMeaGg",
+    il2cpp_class_is_interface: "xRvwNEeNkWa",
+    il2cpp_class_array_element_size: "RZRtCiyLCJo",
+    il2cpp_class_from_type: "zYXbXrMyCZQ",
+    il2cpp_class_get_type: "mtSsQ_HljLe",
+    il2cpp_class_get_type_token: "FGUVOB_kAoz",
+    il2cpp_class_has_attribute: "wdQDOFsLsBQ",
+    il2cpp_class_has_references: "KWlYWBokjfv",
+    il2cpp_class_is_enum: "_UhpToulEKm",
+    il2cpp_class_get_image: "_UALPKLDS_n",
+    il2cpp_class_get_assemblyname: "hq_BiOnEODP",
+    il2cpp_class_get_rank: "pdohFUHsWru",
+    il2cpp_class_get_data_size: "HZysNqhalHw",
+    il2cpp_class_get_static_field_data: "ZGYgLpZIzHa",
+    il2cpp_stats_dump_to_file: "_cMgwXTvCvo",
+    il2cpp_stats_get_value: "UuklpGgzbPE",
+    il2cpp_domain_get: "dexNTjDvNey",
+    il2cpp_domain_assembly_open: "rPfDrbU_fsF",
+    il2cpp_domain_get_assemblies: "AnEyaFFeaVk",
+    il2cpp_raise_exception: "xHAOArcRoHt",
+    il2cpp_exception_from_name_msg: "hldTbUnvLSE",
+    il2cpp_get_exception_argument_null: "xXYqG_fxRkM",
+    il2cpp_format_exception: "HmVEXuEhnBr",
+    il2cpp_format_stack_trace: "qmIfEUBmWrW",
+    il2cpp_unhandled_exception: "klvdQNbTlxo",
+    il2cpp_native_stack_trace: "UuDZLhfmW_m",
+    il2cpp_field_get_flags: "_opTQabdeDS",
+    il2cpp_field_get_from_reflection: "MS_CNXHAvcE",
+    il2cpp_field_get_name: "VKBoPrOIAxG",
+    il2cpp_field_get_parent: "DuAcWIPAIad",
+    il2cpp_field_get_object: "zupztMaISrs",
+    il2cpp_field_get_offset: "_dIpVAWJgPS",
+    il2cpp_field_get_type: "SvbtDOTTaP_",
+    il2cpp_field_get_value: "arfUQocOMaE",
+    il2cpp_field_get_value_object: "K_xBLDFveCC",
+    il2cpp_field_has_attribute: "aWsShnATkuI",
+    il2cpp_field_set_value: "lmOrNxLJleJ",
+    il2cpp_field_static_get_value: "PjkzLPXZuOz",
+    il2cpp_field_static_set_value: "rGogdYxgXLI",
+    il2cpp_field_set_value_object: "OoNzMfyju_w",
+    il2cpp_field_is_literal: "oZcxbgEwtRu",
+    il2cpp_gc_collect: "gJhiTVhcXgt",
+    il2cpp_gc_collect_a_little: "iYbVMtdIWBG",
+    il2cpp_gc_start_incremental_collection: "HBIYgdsGquw",
+    il2cpp_gc_disable: "hsyhxgVLtOS",
+    il2cpp_gc_enable: "YJdIBaqKxLe",
+    il2cpp_gc_is_disabled: "nuIxKrzSDKd",
+    il2cpp_gc_set_mode: "sPgCih_kMoE",
+    il2cpp_gc_get_max_time_slice_ns: "wamognHiOFC",
+    il2cpp_gc_set_max_time_slice_ns: "dcPCH_YRMiK",
+    il2cpp_gc_is_incremental: "fNusqAczGBc",
+    il2cpp_gc_get_used_size: "BmxGtzaNiJF",
+    il2cpp_gc_get_heap_size: "urxe_DMCEXj",
+    il2cpp_gc_wbarrier_set_field: "FEaKQuTXSIN",
+    il2cpp_gc_has_strict_wbarriers: "CxfFRQ_fPM_",
+    il2cpp_gc_set_external_allocation_tracker: "zkoYzPNsYen",
+    il2cpp_gc_set_external_wbarrier_tracker: "nzRUlTtRnZW",
+    il2cpp_gc_foreach_heap: "iIaSadmfsxe",
+    il2cpp_stop_gc_world: "DSnBKUJGNTV",
+    il2cpp_start_gc_world: "GphncTNRVgX",
+    il2cpp_gc_alloc_fixed: "JxqispG_WIe",
+    il2cpp_gc_free_fixed: "_XTpjVLyVUx",
+    il2cpp_gchandle_new: "IMMLYjVCYFg",
+    il2cpp_gchandle_new_weakref: "YqsrETdJebB",
+    il2cpp_gchandle_get_target: "qNZPlifxVid",
+    il2cpp_gchandle_free: "_zPeYtqhJYY",
+    il2cpp_gchandle_foreach_get_target: "vcoEwAxsozA",
+    il2cpp_object_header_size: "eAMJaKLAWeX",
+    il2cpp_array_object_header_size: "TrlvArcJyQX",
+    il2cpp_offset_of_array_length_in_array_object_header: "_zdBIjyMUel",
+    il2cpp_offset_of_array_bounds_in_array_object_header: "qxZZBSpEpay",
+    il2cpp_allocation_granularity: "WvnJaIYOCCH",
+    il2cpp_unity_liveness_allocate_struct: "vzVCsBqZKra",
+    il2cpp_unity_liveness_calculation_from_root: "_bhbmfCQyKB",
+    il2cpp_unity_liveness_calculation_from_statics: "shwFrkuMVTD",
+    il2cpp_unity_liveness_finalize: "WtHqOseegcH",
+    il2cpp_unity_liveness_free_struct: "TkBihC_jzeU",
+    il2cpp_method_get_return_type: "RbEBOhiJVLy",
+    il2cpp_method_get_declaring_type: "NBArcApK_ah",
+    il2cpp_method_get_name: "reVcJYTGbOx",
+    il2cpp_method_get_from_reflection: "SiYDXyPmqHm",
+    il2cpp_method_get_object: "ISNQfZIdahk",
+    il2cpp_method_is_generic: "IamTWZUOewG",
+    il2cpp_method_is_inflated: "nhKegcmlvTv",
+    il2cpp_method_is_instance: "iTEk_MsloyT",
+    il2cpp_method_get_param_count: "TjAhRZpcpXp",
+    il2cpp_method_get_param: "uvKQmhOiUMp",
+    il2cpp_method_get_class: "suwMGnWFoMb",
+    il2cpp_method_has_attribute: "TYK_sGURTUI",
+    il2cpp_method_get_flags: "xYqcFOnLtuY",
+    il2cpp_method_get_token: "IF_BEXDjcxU",
+    il2cpp_method_get_param_name: "ncHvMOkBnDz",
+    il2cpp_property_get_flags: "SDVfhCYeqpg",
+    il2cpp_property_get_get_method: "vKCNzvnPHLG",
+    il2cpp_property_get_set_method: "eoCFGzIxqtL",
+    il2cpp_property_get_name: "SqBCgjzRUOV",
+    il2cpp_property_get_parent: "dpfbFXz_IkJ",
+    il2cpp_object_get_class: "ZlmOaFsxEwI",
+    il2cpp_object_get_size: "rbuMnpWobvG",
+    il2cpp_object_get_virtual_method: "uGxAqEfokEm",
+    il2cpp_object_new: "wcstXuZALcK",
+    il2cpp_object_unbox: "mTCZCUqWYTg",
+    il2cpp_value_box: "iDUfiBMoc_M",
+    il2cpp_monitor_enter: "CbBNNRSwQeC",
+    il2cpp_monitor_try_enter: "itCHVOSwuah",
+    il2cpp_monitor_exit: "SNfqcVwKUBW",
+    il2cpp_monitor_pulse: "AmbQYNMtvjx",
+    il2cpp_monitor_pulse_all: "kfRFYHwksYq",
+    il2cpp_monitor_wait: "UNAICQbwxKL",
+    il2cpp_monitor_try_wait: "ef_EiEZUJcX",
+    il2cpp_runtime_invoke: "KTHIdICyWMo",
+    il2cpp_runtime_invoke_convert_args: "UPmPjRqJbGH",
+    il2cpp_runtime_class_init: "ZItMFaYYVhL",
+    il2cpp_runtime_object_init: "PvUdbYYXFcj",
+    il2cpp_runtime_object_init_exception: "aAWQOAqRFZQ",
+    il2cpp_runtime_unhandled_exception_policy_set: "sMqweLCViYH",
+    il2cpp_string_length: "huVYuqSmDvS",
+    il2cpp_string_chars: "ylUqRrkUyXZ",
+    il2cpp_string_new: "DhGZEgUOfhw",
+    il2cpp_string_new_len: "nIdajvbDWCI",
+    il2cpp_string_new_utf16: "PgWUHVWTBks",
+    il2cpp_string_new_wrapper: "tSmStHPySxP",
+    il2cpp_string_intern: "UavswTIbEjv",
+    il2cpp_string_is_interned: "IMFdBBcWDqU",
+    il2cpp_thread_current: "FVljUkhPrwt",
+    il2cpp_thread_attach: "TTXfdVrrKdp",
+    il2cpp_thread_detach: "_ckHYtDokuZ",
+    il2cpp_is_vm_thread: "mJlybUkxzFi",
+    il2cpp_current_thread_walk_frame_stack: "pSpzKtbhedG",
+    il2cpp_thread_walk_frame_stack: "lBsyqPeGbsc",
+    il2cpp_current_thread_get_top_frame: "rFyLkIJJZfi",
+    il2cpp_thread_get_top_frame: "myw_npdTEIS",
+    il2cpp_current_thread_get_frame_at: "YHEweiVPWwQ",
+    il2cpp_thread_get_frame_at: "hAmaRROVVDj",
+    il2cpp_current_thread_get_stack_depth: "QKdfsCCiOOb",
+    il2cpp_thread_get_stack_depth: "SXnsRfOtl_t",
+    il2cpp_override_stack_backtrace: "upMexBSIPex",
+    il2cpp_type_get_object: "tWKiWSNucip",
+    il2cpp_type_get_type: "uKu_TmNxWMg",
+    il2cpp_type_get_class_or_element_class: "XYtQyiyrvjX",
+    il2cpp_type_get_name: "moWxJ_mSmgM",
+    il2cpp_type_is_byref: "hvWtHjaeCKx",
+    il2cpp_type_get_attrs: "eOihVwcMOza",
+    il2cpp_type_equals: "JXNXVeuTqcm",
+    il2cpp_type_get_assembly_qualified_name: "yu_tCDechXS",
+    il2cpp_type_get_reflection_name: "yWQnvpxnyxc",
+    il2cpp_type_is_static: "PYxUkISgaHE",
+    il2cpp_type_is_pointer_type: "GmcSCUjjXmb",
+    il2cpp_image_get_assembly: "RabbhJgTRev",
+    il2cpp_image_get_name: "hPZCGgsNspk",
+    il2cpp_image_get_filename: "UeZzco_oYPE",
+    il2cpp_image_get_entry_point: "UZRZYfH_xAg",
+    il2cpp_image_get_class_count: "nxzefBnHRZx",
+    il2cpp_image_get_class: "AqxBbDPyQT_",
+    il2cpp_capture_memory_snapshot: "kcpIpzeXXFe",
+    il2cpp_free_captured_memory_snapshot: "rXhKHFODlBH",
+    il2cpp_set_find_plugin_callback: "lvKnJkifRzK",
+    il2cpp_register_log_callback: "KAJBWMtknEM",
+    il2cpp_debugger_set_agent_options: "xaqxTjUgkhq",
+    il2cpp_is_debugger_attached: "YKLRqPJfirh",
+    il2cpp_register_debugger_agent_transport: "xIfkHaKYZKh",
+    il2cpp_debug_foreach_method: "lkNRqeFdGUD",
+    il2cpp_debug_get_method_info: "aPinXeAGhEI",
+    il2cpp_unity_install_unitytls_interface: "hSxSXzFFzbC",
+    il2cpp_custom_attrs_from_class: "foDvOpDxAmi",
+    il2cpp_custom_attrs_from_method: "YsTlgJFWUII",
+    il2cpp_custom_attrs_from_field: "bVzCRWRMURs",
+    il2cpp_custom_attrs_get_attr: "voUkYlDorwm",
+    il2cpp_custom_attrs_has_attr: "qLcZKIRNSNm",
+    il2cpp_custom_attrs_construct: "bYuJmQbwuSu",
+    il2cpp_custom_attrs_free: "SBznjpNmzht",
+    il2cpp_class_set_userdata: "KdHWTpbrcHv",
+    il2cpp_class_get_userdata_offset: "aVeQpbhVJSE",
+    il2cpp_set_default_thread_affinity: "EwDnhaNOXWo",
+    il2cpp_unity_set_android_network_up_state_func: "AHRZaFFhwPr",
 };
 
 Il2Cpp.$config.exports = {};
@@ -442,26 +456,28 @@ let vrMenuTilt = -8;
 let accentColor = [1.0, 0.22, 0.20, 1];
 let accentDimColor = [0.32, 0.06, 0.06, 1];
 const categoryTitles = { 0: "Home" };
-let menuOutlineColor = [0.85, 0.15, 0.16, 1];
+// defaults are the TOAST design: flat brown crust on tan bread, no pulsing
+// (outline/bg base == peak collapses the gradient lerp)
+let menuOutlineColor = [0.60, 0.33, 0.05, 1];
 let pageOutlineColor = menuOutlineColor;
 let buttonOutlineColor = pageOutlineColor;
-let outlineGradientBase = [0.16, 0.03, 0.04, 1];
-let outlineGradientPeak = [0.85, 0.18, 0.22, 1];
-let pulseSpeed = 1.8;
-let bgPulseBase = [0.012, 0.004, 0.005, 0.98];
-let bgPulsePeak = [0.045, 0.012, 0.014, 0.98];
-let menuOutlineThickness = 0.012;
-let controlOutlineThickness = 0.0075;
-let rowOutlineThickness = 0.0065;
+let outlineGradientBase = [0.60, 0.33, 0.05, 1];
+let outlineGradientPeak = [0.60, 0.33, 0.05, 1];
+let pulseSpeed = 0.8;
+let bgPulseBase = [0.98, 0.80, 0.47, 0.97];
+let bgPulsePeak = [0.98, 0.80, 0.47, 0.97];
+let menuOutlineThickness = 0.020;
+let controlOutlineThickness = 0.008;
+let rowOutlineThickness = 0.006;
 let outlinesEnabled = true;
-let rowButtonHeight = 0.065;
-let rowButtonWidth = 0.65;
-let rowButtonSpacing = 0.032;
-let disconnectButtonWidth = 0.62;
+let rowButtonHeight = 0.061;
+let rowButtonWidth = 0.60;
+let rowButtonSpacing = 0.0275;
+let disconnectButtonWidth = 0.60;
 let pageButtonWidth = 0.135;
-let cornerRoundness = 0.34;
-let titleWidth = 0.64;
-let titleHeight = 0.063;
+let cornerRoundness = 0.46;
+let titleWidth = 0.30;
+let titleHeight = 0.050;
 let tagGunDelay = 0;
 let infHealthEnabled = false;
 let flyVelocity = [10, 20, 30];
@@ -529,9 +545,11 @@ let pcMenuDistance = 0.7;
 let menuOpenSpeed = 2.5;
 let menuCloseSpeed = 3.0;
 const CARD_ROWS = 6;
+// the crust dip and the bottom bar eat vertical space, so a toast page is shorter
+const TOAST_ROWS = 5;
 function getButtonsPerPage() {
     if (cardLayout && !_gridMode && !searchKeyboardOpen)
-        return CARD_ROWS;
+        return toastShape ? TOAST_ROWS : CARD_ROWS;
     const effectiveStep = Math.max(rowButtonSpacing, rowButtonHeight * 0.45);
     return Math.max(4, Math.min(8, Math.floor(0.225 / effectiveStep) + 1));
 }
@@ -545,15 +563,15 @@ let assemblyImages, acImage, coreImage, physImage, uiImage, uiModuleImage, textR
 let _vx53f, _vx2eb, _omniWlPruneTimer = 0, _vx5c4, _iterItem, _vx574, _vx2a4, _gunOverrideLayer;
 let audioManager = null;
 let handTextObj = null;
-let bgColor = [0.020, 0.008, 0.010, 0.98];
-let textColor = [0.95, 0.95, 0.95, 1.0];
-let buttonColor = [0.09, 0.025, 0.03, 0.96];
-let buttonPressedColor = [0.48, 0.12, 0.14, 0.97];
+let bgColor = [0.98, 0.80, 0.47, 0.97];
+let textColor = [0.06, 0.04, 0.01, 1];
+let buttonColor = [1.0, 0.89, 0.63, 0.98];
+let buttonPressedColor = [0.94, 0.62, 0.12, 0.98];
 let dangerButtonColor = [0.16, 0.055, 0.06, 0.96];
-let textGradientEnabled = true;
-let textGradientSpeed = 2.4;
-let textGradientDarkColor = [120, 25, 28];
-let textGradientLightColor = [255, 120, 115];
+let textGradientEnabled = false;
+let textGradientSpeed = 1.0;
+let textGradientDarkColor = [40, 22, 4];
+let textGradientLightColor = [90, 50, 10];
 let searchKeyboardOpen = false;
 let searchQuery = "";
 let searchCategoryIndex = -1;
@@ -561,6 +579,8 @@ let searchResultsCategory = [];
 let _gridMode = false;
 let shellLayout = false;
 let cardLayout = true;
+let toastShape = true;
+let buttonInfoEnabled = false;
 let splashDismissed = false;
 let pointerEnabled = true;
 let pointerCursor = null;
@@ -573,7 +593,7 @@ const GRID_PER_PAGE = 10;
 const _catTitles = {
     0: "Home", 2: "Player", 3: "Others", 4: "Users", 5: "Items", 6: "Combat",
     7: "World", 8: "Overpowered", 9: "Blueprints", 10: "Settings", 11: "Credits",
-    12: "IDs", 13: "Movement", 14: "Gun Mods", 15: "Misc",
+    12: "IDs", 13: "Movement", 14: "Gun Mods", 15: "Misc", 16: "Experimental",
     17: "Dev Stuff", 18: "Whitelist",
 };
 let keyboardMode = "search";
@@ -591,6 +611,12 @@ let eighteenPlusThemeActive = false;
 let eighteenPlus2BgTexture = null;
 let eighteenPlus2BgTried = false;
 let _pendingEighteenPlusTheme = 0;
+// favourites are keyed by button text so they survive category rebuilds
+let _favorites = new Set();
+let _favoritesCategory = -1;
+const FAVORITE_COLOR = [1.0, 0.82, 0.12, 1];
+// 100 network spawns in one frame is a noticeable hitch - tune here if needed
+let BLIND_GUN_COUNT = 100;
 let _titleOverrideText = "";
 let _titleOverrideUntil = 0;
 let _titleOverrideActive = false;
@@ -600,6 +626,7 @@ const FEMBOY_BG_B64 = "/9j/2wCEAAIBAQEBAQIBAQECAgICAgQDAgICAgUEBAMEBgUGBgYFBgYGB
 let themeIndex = 0;
 let buttonIndex = 0;
 let GunPointer = null;
+let GunPointerCrust = null;
 let GunLine = null;
 let GunPointerMaterial = null;
 let GunLineObject = null;
@@ -1123,7 +1150,7 @@ let _wlPlayers = [];
 let deltaTime = 0, time = 0, frameCount = 0;
 let _pcMode = false, _pcMenuOpen = false, _pcFlyEnabled = false, _pcLastCursorX = -1, _pcLastCursorY = -1, _pcMenuSelector = 0, _pcQWasDown = false, _pcEscWasDown = false, _pcUpWasDown = false, _pcDownWasDown = false, _pcEnterWasDown = false, _pcMinusWasDown = false, _pcPlusWasDown = false, _pcLeftWasDown = false, _pcRightWasDown = false, _pcRmbWasDown = false, _pcLmbMenuWasDown = false;
 let _VK_E = 69;
-let _VK_BACK_PC = 8, _VK_DELETE_PC = 46, _VK_M_PC = 77;
+let _VK_BACK_PC = 8, _VK_DELETE_PC = 46, _VK_M_PC = 77, _VK_E_PC = 69;
 let _pcBackWasDown = false, _pcDeleteWasDown = false, _pcMWasDown = false;
 let _VK_Q = 81, _VK_ESCAPE = 27, _VK_RBUTTON = 2, _VK_LBUTTON = 1, _VK_W = 87, _VK_A = 65, _VK_S = 83, _VK_D = 68, _VK_SPACE_PC = 32, _VK_SHIFT_PC = 16, _VK_UP_PC = 38, _VK_DOWN_PC = 40, _VK_LEFT_PC = 37, _VK_RIGHT_PC = 39, _VK_OEM_MINUS_PC = 0xbd, _VK_OEM_PLUS_PC = 0xbb, _VK_SUBTRACT_PC = 0x6d, _VK_ADD_PC = 0x6b, _VK_RETURN_PC = 13;
 let _GAKS = null, _GCP = null, _pcPoint = Memory.alloc(8);
@@ -1207,11 +1234,12 @@ Il2Cpp.perform(() => {
     function syteHookReturn(cls, methodName, condition, value, paramCount = 0) {
         try {
             const method = cls.method(methodName, paramCount);
-            const original = method.nativeFunction;
             method.implementation = function (...args) {
                 if (condition())
                     return value;
-                return original.call(this, ...args);
+                // must re-enter through the object's method wrapper; the raw
+                // nativeFunction expects the instance pointer prepended
+                return this.method(methodName, args.length).invoke(...args);
             };
             return true;
         }
@@ -1972,7 +2000,7 @@ Il2Cpp.perform(() => {
         return result;
     }
     const TITLE_HEAD = "Toast ", TITLE_TAIL = "Menu";
-    const TITLE_HEAD_HEX = "#FFFFFF", TITLE_TAIL_HEX = "#FF3833";
+    let TITLE_HEAD_HEX = "#100A03", TITLE_TAIL_HEX = "#99540D";
     function makeTypedTitle(t) {
         const full = TITLE_HEAD + TITLE_TAIL;
         const typeSpeed = 0.14, hold = 2.4;
@@ -2461,15 +2489,67 @@ Il2Cpp.perform(() => {
         return obj;
     }
     const roundedMeshCache = new Map();
-    function getRoundedBoxMesh(width, height, cornerRadius) {
+    // Bread-slice silhouette: rounded-rect body with two crust lobes on top
+    // and a dip between them. Points are (y, z) in the same normalized
+    // -0.5..0.5 space the rounded-rect path uses, wound counter-clockwise so
+    // the centre-fan triangulation below keeps its winding.
+    // Crown geometry, solved for peak 0.40 / dip 0.31 / shoulder 0.24.
+    // 0.176 notch read as two separate cheeks; 0.040 was so flat it looked like
+    // a tombstone. 0.090 gives two readable humps on one slice.
+    const TOAST_LOBE_OFFSET = 0.2226; // horizontal distance of each lobe centre
+    const TOAST_LOBE_RADIUS = 0.3204;
+    const TOAST_LOBE_BASE = 0.0796;   // vertical centre of the lobes
+    function toastTopZ(y) {
+        // upper envelope of the two lobe circles - their overlap forms the dip
+        let z = -0.5;
+        for (const cy of [TOAST_LOBE_OFFSET, -TOAST_LOBE_OFFSET]) {
+            const dy = y - cy;
+            const d = TOAST_LOBE_RADIUS * TOAST_LOBE_RADIUS - dy * dy;
+            if (d > 0)
+                z = Math.max(z, TOAST_LOBE_BASE + Math.sqrt(d));
+        }
+        return z;
+    }
+    function buildToastPerimeter(perimeter, radiusY, radiusZ) {
+        const r = Math.min(0.14, Math.max(radiusY, radiusZ));
+        const shoulder = toastTopZ(0.5);
+        const arcSegments = 8;
+        const topSegments = 48;
+        // right edge, bottom-up to where the crust starts
+        perimeter.push([0.5, -0.5 + r]);
+        perimeter.push([0.5, shoulder]);
+        // crust: sweep right to left across both lobes
+        for (let i = 1; i < topSegments; i++) {
+            const y = 0.5 - (i / topSegments);
+            perimeter.push([y, toastTopZ(y)]);
+        }
+        // left edge, down to the bottom corner
+        perimeter.push([-0.5, shoulder]);
+        perimeter.push([-0.5, -0.5 + r]);
+        // bottom-left corner
+        for (let i = 0; i <= arcSegments; i++) {
+            const a = Math.PI + (Math.PI * 0.5) * (i / arcSegments);
+            perimeter.push([-0.5 + r + Math.cos(a) * r, -0.5 + r + Math.sin(a) * r]);
+        }
+        // bottom-right corner (bottom edge is implied by the straight run between arcs)
+        for (let i = 0; i <= arcSegments; i++) {
+            const a = Math.PI * 1.5 + (Math.PI * 0.5) * (i / arcSegments);
+            perimeter.push([0.5 - r + Math.cos(a) * r, -0.5 + r + Math.sin(a) * r]);
+        }
+    }
+    function getRoundedBoxMesh(width, height, cornerRadius, shape = "rect") {
         const normalizedY = Math.max(0.001, Math.min(0.46, cornerRadius / Math.max(width, 0.001)));
         const normalizedZ = Math.max(0.001, Math.min(0.46, cornerRadius / Math.max(height, 0.001)));
-        const cacheKey = normalizedY.toFixed(4) + ":" + normalizedZ.toFixed(4);
+        const cacheKey = shape + ":" + normalizedY.toFixed(4) + ":" + normalizedZ.toFixed(4);
         const cached = roundedMeshCache.get(cacheKey);
         if (cached && !cached.isNull?.())
             return cached;
         const perimeter = [];
         const cornerSegments = 10;
+        if (shape == "toast") {
+            buildToastPerimeter(perimeter, normalizedY, normalizedZ);
+        }
+        else {
         const corners = [
             [0.5 - normalizedY, 0.5 - normalizedZ, 0, Math.PI * 0.5],
             [
@@ -2500,6 +2580,7 @@ Il2Cpp.perform(() => {
                     centerZ + Math.sin(angle) * normalizedZ,
                 ]);
             }
+        }
         }
         const vertices = [];
         for (const [y, z] of perimeter)
@@ -2549,14 +2630,14 @@ Il2Cpp.perform(() => {
         roundedMeshCache.set(cacheKey, mesh);
         return mesh;
     }
-    function createOutlinedRoundedObject(pos, scale, fillColor, outlineColor, parent, interactive = false, outlineSize = 0.025) {
+    function createOutlinedRoundedObject(pos, scale, fillColor, outlineColor, parent, interactive = false, outlineSize = 0.025, shape = "rect") {
         const createLayer = (center, size, color, keepCollider, cornerRadius) => {
             const layer = createObject(center, identityQuaternion, size, 3, color, parent);
             try {
                 const filter = getComponent(layer, MeshFilter);
                 filter
                     .method("set_sharedMesh")
-                    .invoke(getRoundedBoxMesh(size[1], size[2], cornerRadius));
+                    .invoke(getRoundedBoxMesh(size[1], size[2], cornerRadius, shape));
             }
             catch (e) {
                 syteLog("[-] Rounded mesh fallback: " + e);
@@ -2595,10 +2676,23 @@ Il2Cpp.perform(() => {
         }
         return createLayer(pos, scale, fillColor, interactive, fillRadius);
     }
-    function sendNotification(_text = "", _reload = true, _t = 5) { void _text; void _reload; void _t; }
+    // Was a no-op stub, so all ~228 "spawned X" / "kicked N" messages went
+    // nowhere. Routes them to the line above the menu instead. Button tooltips
+    // stay off (see buttonInfoEnabled) so this only ever shows what mods DID.
+    function sendNotification(text = "", _flag = false, t = 5) {
+        void _flag;
+        try {
+            const s = String(text == null ? "" : text).trim();
+            if (!s) return;
+            _titleOverrideText = s;
+            _titleOverrideUntil = time + (Number(t) > 0 ? Number(t) : 5);
+            _titleOverrideActive = true;
+        }
+        catch (_) { }
+    }
     function showButtonDescription(btn) {
         try {
-            if (!btn) return;
+            if (!btn || !buttonInfoEnabled) return;
             let raw = String((typeof btn.toolTip === "string" && btn.toolTip) ? btn.toolTip : (btn.buttonText || ""));
             if (raw.indexOf("tooltip no workie") === 0)
                 raw = raw.substring("tooltip no workie".length);
@@ -2885,11 +2979,14 @@ Il2Cpp.perform(() => {
     const CARD_ICON_SY = 0.1077, CARD_ICON_SZ = 0.0768;
     const CARD_HOME_Y = -0.0431, CARD_EXIT_Y = -0.0822;
     const CARD_ARROW_SY = 0.2284, CARD_ARROW_SZ = 0.0716, CARD_ARROW_Z = -0.1404;
+    const TOAST_ROW_TOP_Z = 0.0040, TOAST_ROW_STEP = 0.0275;
+    const TOAST_ROW_SY = 0.6000, TOAST_ROW_SZ = 0.0595;
+    const TOAST_ARROW_Y = 0.0570; // symmetric, unlike the rect card's offset pair
     const CARD_ARROW_LY = 0.0573, CARD_ARROW_RY = -0.0621;
     const ICON_X = 0.106;
 
-    function cardIconButton(y, id, outline) {
-        const b = createOutlinedRoundedObject([0.1, y, CARD_HEAD_Z], [0.09, CARD_ICON_SY, CARD_ICON_SZ],
+    function cardIconButton(y, id, outline, z = CARD_HEAD_Z) {
+        const b = createOutlinedRoundedObject([0.1, y, z], [0.09, CARD_ICON_SY, CARD_ICON_SZ],
             buttonColor, outline, getTransform(menu), true, controlOutlineThickness);
         b.method("set_name").invoke(Il2Cpp.string("@" + id));
         addComponent(b, GorillaReportButton);
@@ -2919,28 +3016,46 @@ Il2Cpp.perform(() => {
     const SPLASH_LINE1_Z = 0.0300, SPLASH_LINE2_Z = -0.0180;
     const SPLASH_OK_Z = -0.0950, SPLASH_OK_SY = 0.3400, SPLASH_OK_SZ = 0.0700;
     function renderSplash(canvasObject, pulsedOutline) {
-        renderMenuText(canvasObject, "Toast Menu", textColor, [0.11, 0.0509, CARD_HEAD_Z], [0.3556, 0.0589], true);
+        // the crust peak is above the dip, so on toast the title drops to centre
+        if (toastShape)
+            renderMenuText(canvasObject, "Toast Menu", textColor, [0.11, 0, 0.0300], [0.3000, 0.0500], true);
+        else
+            renderMenuText(canvasObject, "Toast Menu", textColor, [0.11, 0.0509, CARD_HEAD_Z], [0.3556, 0.0589], true);
         renderMenuText(canvasObject, "this menu was made by", textColor,
-            [0.11, 0, SPLASH_LINE1_Z], [0.5600, 0.0380]);
+            [0.11, 0, toastShape ? 0.0000 : SPLASH_LINE1_Z], [0.5600, 0.0380]);
         renderMenuText(canvasObject, "Qstar", textColor,
-            [0.11, 0, SPLASH_LINE2_Z], [0.3600, 0.0680]);
+            [0.11, 0, toastShape ? -0.0350 : SPLASH_LINE2_Z], [0.3600, 0.0680]);
         const ok = createOutlinedRoundedObject([0.1, 0, SPLASH_OK_Z], [0.09, SPLASH_OK_SY, SPLASH_OK_SZ],
             buttonColor, pulsedOutline, getTransform(menu), true, controlOutlineThickness);
         ok.method("set_name").invoke(Il2Cpp.string("@SplashOk"));
         addComponent(ok, GorillaReportButton);
         renderMenuText(canvasObject, "okay", textColor, [0.11, 0, SPLASH_OK_Z], [SPLASH_OK_SY * 0.75, 0.0500]);
     }
+    // With the bread silhouette the header moves: the two icons tuck up into
+    // the crust lobes and the title drops to dead centre under the dip.
+    // ---- toast layout. positions are WORLD metres, scales are LOCAL (they get
+    // multiplied by the menu root scale 0.3 on y and 0.3825 on z). panel spans
+    // y -0.115..0.115, z -0.1619..0.1219; crust peak 0.0935, dip 0.0436. ----
+    // home and disconnect sit low in the crust lobes; title tucks under the dip
+    const TOAST_ICON_Z = 0.0600, TOAST_ICON_Y = 0.0598;
+    const TOAST_TITLE_Z = 0.0290, TOAST_TITLE_SY = 0.3000;
     function renderCardHeader(canvasObject, pulsedOutline) {
-        renderMenuText(canvasObject, "Toast Menu", textColor, [0.11, 0.0509, CARD_HEAD_Z], [0.3556, 0.0589], true);
-        cardIconButton(CARD_HOME_Y, "GoHome", pulsedOutline);
-        drawHomeIcon(CARD_HOME_Y, CARD_HEAD_Z, textColor);
-        cardIconButton(CARD_EXIT_Y, "Disconnect", pulsedOutline);
-        drawExitIcon(CARD_EXIT_Y, CARD_HEAD_Z, textColor);
+        const iconZ = toastShape ? TOAST_ICON_Z : CARD_HEAD_Z;
+        const homeY = toastShape ? TOAST_ICON_Y : CARD_HOME_Y;
+        const exitY = toastShape ? -TOAST_ICON_Y : CARD_EXIT_Y;
+        if (toastShape)
+            renderMenuText(canvasObject, "Toast Menu", textColor, [0.11, 0, TOAST_TITLE_Z], [TOAST_TITLE_SY, 0.0500], true);
+        else
+            renderMenuText(canvasObject, "Toast Menu", textColor, [0.11, 0.0509, CARD_HEAD_Z], [0.3556, 0.0589], true);
+        cardIconButton(homeY, "GoHome", pulsedOutline, iconZ);
+        drawHomeIcon(homeY, iconZ, textColor);
+        cardIconButton(exitY, "Disconnect", pulsedOutline, iconZ);
+        drawExitIcon(exitY, iconZ, textColor);
     }
     function renderCardFooter(canvasObject, pulsedOutline) {
         for (const a of [
-            { y: CARD_ARROW_LY, id: "PreviousPage", dir: 1 },
-            { y: CARD_ARROW_RY, id: "NextPage", dir: -1 },
+            { y: toastShape ? TOAST_ARROW_Y : CARD_ARROW_LY, id: "PreviousPage", dir: 1 },
+            { y: toastShape ? -TOAST_ARROW_Y : CARD_ARROW_RY, id: "NextPage", dir: -1 },
         ]) {
             const b = createOutlinedRoundedObject([0.1, a.y, CARD_ARROW_Z], [0.09, CARD_ARROW_SY, CARD_ARROW_SZ],
                 buttonColor, pulsedOutline, getTransform(menu), true, controlOutlineThickness);
@@ -3120,7 +3235,7 @@ Il2Cpp.perform(() => {
             outlineGradientBase[2] + pulseT * (outlineGradientPeak[2] - outlineGradientBase[2]),
             outlineGradientBase[3] + pulseT * (outlineGradientPeak[3] - outlineGradientBase[3]),
         ];
-        const menuBackground = createOutlinedRoundedObject([0.1, 0, panelCenterZ], [0.1, panelScaleY, panelScaleZ], pulsedBg, pulsedOutline, getTransform(menu), false, menuOutlineThickness);
+        const menuBackground = createOutlinedRoundedObject([0.1, 0, panelCenterZ], [0.1, panelScaleY, panelScaleZ], pulsedBg, pulsedOutline, getTransform(menu), false, menuOutlineThickness, (toastShape && CARD) ? "toast" : "rect");
         applyMenuBgTexture(menuBackground);
         const canvasObject = createObject(zeroVector, identityQuaternion, oneVector, 3, [0, 0, 0, 0], getTransform(menu));
         try {
@@ -3149,8 +3264,14 @@ Il2Cpp.perform(() => {
         if (SPLASH) {
             try { renderSplash(canvasObject, pulsedOutline); } catch (_) { }
         }
+        // not gated on buttonInfoEnabled - that only suppresses tooltips, this
+        // line still has to carry action results. z=0.188 sits outside the bread
+        // silhouette, so on toast it floats just above the crust instead.
         if (_titleOverrideActive && _titleOverrideText && !SHELL) {
-            renderMenuText(canvasObject, _titleOverrideText, textColor, [0.11, 0, 0.188], [titleWidth, 0.05]);
+            if (toastShape)
+                renderMenuText(canvasObject, _titleOverrideText, textColor, [0.11, 0, 0.1250], [0.6200, 0.0450]);
+            else
+                renderMenuText(canvasObject, _titleOverrideText, textColor, [0.11, 0, 0.188], [titleWidth, 0.05]);
         }
         if (!SHELL && !CARD) {
             const disconnectButton = createOutlinedRoundedObject([0.1, 0.0, 0.142], [0.09, disconnectButtonWidth, 0.065], buttonColor, pulsedOutline, getTransform(menu), true, controlOutlineThickness);
@@ -3203,11 +3324,14 @@ Il2Cpp.perform(() => {
         let i = 0;
         ((gridUsed || SHELL || SPLASH) ? [] : targetMods).forEach((buttonData, index) => {
             const colY = 0;
-            const rowZ = CARD
-                ? CARD_ROW_TOP_Z - i * CARD_ROW_STEP
-                : rowStartZ - i * rowButtonSpacing;
-            const cellW = CARD ? CARD_ROW_SY : rowButtonWidth;
-            const cellH = CARD ? CARD_ROW_SZ : rowButtonHeight;
+            const TOASTED = CARD && toastShape;
+            const rowZ = TOASTED
+                ? TOAST_ROW_TOP_Z - i * TOAST_ROW_STEP
+                : CARD
+                    ? CARD_ROW_TOP_Z - i * CARD_ROW_STEP
+                    : rowStartZ - i * rowButtonSpacing;
+            const cellW = TOASTED ? TOAST_ROW_SY : CARD ? CARD_ROW_SY : rowButtonWidth;
+            const cellH = TOASTED ? TOAST_ROW_SZ : CARD ? CARD_ROW_SZ : rowButtonHeight;
             if (buttonData.stepDown && buttonData.stepUp) {
                 const labelWidth = cellW * 0.56;
                 const sideWidth = cellW * 0.18;
@@ -3240,7 +3364,21 @@ Il2Cpp.perform(() => {
             if (_pcMode && _pcMenuOpen && i === _pcMenuSelector) {
                 finalBtnText = "> " + finalBtnText;
             }
-            renderMenuText(canvasObject, finalBtnText, textColor, [0.11, colY, rowZ], [cellW * (CARD ? 0.95 : 1.23), cellH * (CARD ? 0.72 : 0.74)]);
+            // favourites render gold with a star parked in the row's left gutter;
+            // the label narrows and shifts right so the two never collide
+            const favKey = buttonData.favKey || String(buttonData.buttonText || "");
+            const isFav = _favorites.has(favKey);
+            const labelCol = isFav ? FAVORITE_COLOR : textColor;
+            const baseW = cellW * (CARD ? 0.95 : 1.23);
+            const rowHalfW = cellW * 0.15; // local -> world on the y axis
+            renderMenuText(canvasObject, finalBtnText, labelCol,
+                [0.11, colY - (isFav ? 0.012 : 0), rowZ],
+                [isFav ? cellW * 0.78 : baseW, cellH * (CARD ? 0.72 : 0.74)]);
+            if (isFav) {
+                renderMenuText(canvasObject, "★", labelCol,
+                    [0.11, colY + rowHalfW * 0.85, rowZ],
+                    [cellW * 0.14, cellH * 0.62]);
+            }
             updateButtonColor(button, buttonData, i);
             i++;
         });
@@ -4063,10 +4201,99 @@ Il2Cpp.perform(() => {
             if (!plrID)
                 return;
             const parsed = Il2Cpp.corlib.class("System.Guid").method("Parse").invoke(plrID);
-            netinst.method("RPC_KickPlayer").invoke(parsed);
-            rpcs.method("KickPlayer").invoke(plrID);
+            // our own kick must bypass the kick guard
+            rpcSelf(() => {
+                netinst.method("RPC_KickPlayer").invoke(parsed);
+                rpcs.method("KickPlayer").invoke(plrID);
+            });
         }
         catch (_) { }
+    }
+    /* ================== RPC PROTECTION ==================
+     * Each guard replaces the RPC's implementation once, then consults
+     * _rpcBlocked at call time - so toggling is a plain state flip and we never
+     * install/revert hooks repeatedly. The original is captured *before* the
+     * override so pass-through can't recurse.
+     * Only RPCs aimed at the local player are dropped; everyone else's still
+     * run, otherwise other players would visually desync on our client.
+     */
+    const RPC_GUARDS = [
+        { key: "fling", label: "Fling", def: true, names: ["RPC_AddForce", "RPC_AddExternalForce"] },
+        { key: "kick", label: "Kick", def: true, session: true, names: ["RPC_KickPlayer"] },
+        { key: "die", label: "Force Death", names: ["RPC_DoPlayerDie"] },
+        { key: "teleport", label: "Teleport", names: ["RPC_Teleport"] },
+        { key: "stun", label: "Stun", names: ["RPC_PlayerStun"] },
+        { key: "hit", label: "Damage", names: ["RPC_PlayerHit"] },
+        { key: "hide", label: "Hide", names: ["RPC_SetHide"] },
+        { key: "color", label: "Recolor", names: ["RPC_SetColorHSV"] },
+        { key: "jelly", label: "Jelly", names: ["RPC_SetJellyEffect"] },
+        { key: "stinky", label: "Stinky Tag", names: ["RPC_TagAsStinky"] },
+        { key: "buff", label: "Buffs", names: ["RPC_ApplyBuff"] },
+        { key: "radio", label: "Radioactive", names: ["RPC_SetRadioActive"] },
+        { key: "money", label: "Money Change", names: ["RPC_AddPlayerMoney"] },
+        { key: "drop", label: "Force Drop", names: ["RPC_DropObject"] },
+        { key: "voice", label: "Voice Change", names: ["RPC_SetMuffledVoiceEnabled", "RPC_SetSqueakyVoiceEnabled"] },
+        { key: "shake", label: "Screen Shake", names: ["RPC_ShakeScreen"] },
+    ];
+    const _rpcBlocked = {};
+    for (const g of RPC_GUARDS) _rpcBlocked[g.key] = !!g.def;
+    let _rpcGuardsInstalled = false;
+    let _rpcSelfCall = 0; // our own outgoing RPCs must not trip our own guards
+    let _rpcDropCount = 0;
+    function rpcSelf(fn) {
+        _rpcSelfCall++;
+        try { return fn(); }
+        finally { _rpcSelfCall--; }
+    }
+    function rpcTargetsMe(self) {
+        try { return !!self && playerIsLocal(self); }
+        catch (_) { return false; }
+    }
+    const _rpcHookedAddrs = new Set();
+    function installRpcGuards() {
+        if (_rpcGuardsInstalled) return;
+        let hooked = 0;
+        for (const g of RPC_GUARDS) {
+            for (const name of g.names) {
+                // -1 matches any overload; the explicit counts catch the rest
+                for (const argc of [-1, 0, 1, 2, 3, 4, 5, 6]) {
+                    try {
+                        const cls = g.session
+                            ? acImage.class("AnimalCompany.NetSessionRPCs")
+                            : acImage.class("AnimalCompany.NetPlayer");
+                        const m = argc < 0 ? cls.tryMethod(name) : cls.tryMethod(name, argc);
+                        if (!m || m.virtualAddress?.isNull?.()) continue;
+                        // dedupe by address - the -1 lookup aliases an explicit one,
+                        // and double-replacing would chain hooks on the same target
+                        const addr = m.virtualAddress.toString();
+                        if (_rpcHookedAddrs.has(addr)) continue;
+                        _rpcHookedAddrs.add(addr);
+                        const key = g.key, isSession = !!g.session, mname = name;
+                        m.implementation = function (...args) {
+                            try {
+                                if (_rpcSelfCall === 0 && _rpcBlocked[key]) {
+                                    // session RPCs aren't bound to a player, so we
+                                    // can't tell the target - drop it fail-safe
+                                    if (isSession || rpcTargetsMe(this)) {
+                                        _rpcDropCount++;
+                                        return;
+                                    }
+                                }
+                            }
+                            catch (_) { }
+                            // pass-through has to go back through the object's own
+                            // method wrapper - the raw nativeFunction wants the
+                            // instance pointer prepended and throws otherwise
+                            return this.method(mname, args.length).invoke(...args);
+                        };
+                        hooked++;
+                    }
+                    catch (_) { }
+                }
+            }
+        }
+        _rpcGuardsInstalled = hooked > 0;
+        return hooked;
     }
     let acAntiCheatBypassInstalled = false;
     function installAntiCheatBypass() {
@@ -4184,35 +4411,8 @@ Il2Cpp.perform(() => {
 
 
     ]));
-    TEMPLATE_MENU_BUTTONS.push(menuAddTo("settings", [
-        menuToggle("Anticheat Bypass", {
-            onEnable: () => { installAntiCheatBypass(); sendNotification("don't work", false); },
-            onDisable: () => { revertAntiCheatBypass(); sendNotification("don't work", false); },
-            toolTip: "tooltip no workie",
-        }),
-        menuStepper("Gun Aim Yaw", () => {
-            mmGunYaw -= 5;
-            if (mmGunYaw <= -180) mmGunYaw += 360;
-            sendNotification("gun yaw " + mmGunYaw + " deg", false);
-        }, () => {
-            mmGunYaw += 5;
-            if (mmGunYaw > 180) mmGunYaw -= 360;
-            sendNotification("gun yaw " + mmGunYaw + " deg", false);
-        }, "Turn the gun beam left/right in 5 degree steps."),
-        menuStepper("Gun Aim Pitch", () => {
-            mmGunPitch = Math.max(-80, mmGunPitch - 5);
-            sendNotification("gun pitch " + mmGunPitch + " deg", false);
-        }, () => {
-            mmGunPitch = Math.min(80, mmGunPitch + 5);
-            sendNotification("gun pitch " + mmGunPitch + " deg", false);
-        }, "Tilt the gun beam up/down in 5 degree steps."),
-        menuButton("Reset Gun Aim", () => {
-            mmGunYaw = 0;
-            mmGunPitch = 0;
-            sendNotification("gun aim reset", false);
-        }, "Sets gun yaw and pitch back to 0."),
-    ]));
     installAntiCheatBypass();
+    try { installRpcGuards(); } catch (_) { }
     function omniGetAimTransform() {
         if (_pcMode) {
             try {
@@ -4277,17 +4477,90 @@ Il2Cpp.perform(() => {
         catch (_) { }
     }
     let mmGunGradientSpeed = 1.6;
-    function mmGunGradient(phaseOffset, alpha) {
-        const light = [1.0, 0.25, 0.22];
-        const dark = [0.06, 0.01, 0.012];
-        let p = (time * mmGunGradientSpeed + phaseOffset) % 1;
-        if (p < 0)
-            p += 1;
-        const t = 0.5 - 0.5 * Math.cos(p * Math.PI * 2);
+    // scales are [thickness, width, height] - the toast mesh lives in the YZ
+    // plane with X as its thickness
+    const TOAST_PTR_FILL = [0.012, 0.085, 0.085];
+    const TOAST_PTR_CRUST = [0.010, 0.108, 0.108];
+    // accumulated so the speed can change without the angle jumping
+    let _toastSpinAngle = 0, _toastSpinLast = 0;
+    // gunFire stamps this so the render knows a player-targeting mod is driving it
+    // time-based rather than frame-based: the render can be called from several
+    // places in a frame and a frame counter made this ordering-sensitive
+    let _gunLockUntil = 0;
+    let _gunLockTarget = null; // sticky while the trigger is held
+    const GUN_LOCK_CONE = 3.0; // metres of allowed offset from the line of aim
+    /* Picks whoever is closest to the aim line rather than closest to the hit
+     * point - a player standing in front of a far wall would otherwise lose to
+     * the wall, and someone behind you could win on raw distance. */
+    function gunLockFindPlayer(startPos, dc, maxRange) {
+        let best = null, bestScore = Infinity;
+        try {
+            const s = readVec3Components(startPos);
+            for (const p of getAllNetPlayersList(false)) {
+                try {
+                    if (!p || p.isNull?.() || playerIsLocal(p)) continue;
+                    const pos = getTransform(p).method("get_position").invoke();
+                    const q = readVec3Components(pos);
+                    const vx = q[0] - s[0], vy = q[1] - s[1], vz = q[2] - s[2];
+                    const along = vx * dc[0] + vy * dc[1] + vz * dc[2];
+                    if (along < 0.4 || along > maxRange) continue; // behind us or too far
+                    const px = vx - dc[0] * along, py = vy - dc[1] * along, pz = vz - dc[2] * along;
+                    const perp = Math.sqrt(px * px + py * py + pz * pz);
+                    if (perp > GUN_LOCK_CONE) continue;
+                    const score = perp / (along < 1 ? 1 : along); // angular miss, not metres
+                    if (score < bestScore) { bestScore = score; best = { player: p, position: pos }; }
+                }
+                catch (_) { }
+            }
+        }
+        catch (_) { }
+        return best;
+    }
+    /* Mirrors resolveGunTargetPlayer's fallback - nearest player to the beam's
+     * endpoint. The cone test alone was stricter than the rule the guns
+     * actually fire by, so a gun could hit someone the marker never locked. */
+    function gunLockNearestToPoint(pt, maxDist) {
+        let best = null, bd = maxDist;
+        try {
+            if (!pt) return null;
+            for (const p of getAllNetPlayersList(false)) {
+                try {
+                    if (!p || p.isNull?.() || playerIsLocal(p)) continue;
+                    const pos = getTransform(p).method("get_position").invoke();
+                    const d = Vector3.method("Distance").invoke(pt, pos);
+                    if (typeof d === "number" && !isNaN(d) && d < bd) {
+                        bd = d;
+                        best = { player: p, position: pos };
+                    }
+                }
+                catch (_) { }
+            }
+        }
+        catch (_) { }
+        return best;
+    }
+    function makeToastMarker(pos, scale) {
+        const obj = createObject(pos, identityQuaternion, scale, 3, [1, 1, 1, 1]);
+        try {
+            getComponent(obj, MeshFilter).method("set_sharedMesh")
+                .invoke(getRoundedBoxMesh(scale[1], scale[2], scale[1] * 0.3, "toast"));
+        }
+        catch (_) { }
+        try { const c = getComponent(obj, Collider); if (c != null) Destroy(c); } catch (_) { }
+        try { const rb = getComponent(obj, Rigidbody); if (rb && !rb.isNull?.()) Destroy(rb); } catch (_) { }
+        return obj;
+    }
+    // beam runs crust brown at the muzzle -> menu bread at the tip. reads the
+    // live theme colours so it follows the menu instead of being hardcoded.
+    // `t` is position along the beam (0 = gun, 1 = end), not a time phase.
+    function mmGunGradient(t, alpha) {
+        const crust = menuOutlineColor || [0.60, 0.33, 0.05, 1];
+        const bread = bgColor || [0.98, 0.80, 0.47, 1];
+        const k = Math.max(0, Math.min(1, Number(t) || 0));
         return [
-            dark[0] + (light[0] - dark[0]) * t,
-            dark[1] + (light[1] - dark[1]) * t,
-            dark[2] + (light[2] - dark[2]) * t,
+            crust[0] + (bread[0] - crust[0]) * k,
+            crust[1] + (bread[1] - crust[1]) * k,
+            crust[2] + (bread[2] - crust[2]) * k,
             alpha,
         ];
     }
@@ -4375,25 +4648,91 @@ Il2Cpp.perform(() => {
             if (Vector3.method("op_Equality").invoke(endPos, zeroVector)) {
                 endPos = Vector3.method("op_Addition").invoke(startPos, Vector3.method("op_Multiply").invoke(dir, 512));
             }
+            // Player guns lock on while the trigger is held: the first target
+            // acquired sticks until you let go, so the beam tracks them even if
+            // your aim drifts off. Releasing the trigger drops the lock.
+            let lockedPlayer = null;
+            if (time <= _gunLockUntil && rightTrigger) {
+                if (_gunLockTarget) {
+                    // still a valid target? keep following it
+                    try {
+                        if (_gunLockTarget.isNull?.()) _gunLockTarget = null;
+                        else {
+                            const p = getTransform(_gunLockTarget).method("get_position").invoke();
+                            const d = Vector3.method("Distance").invoke(p, startPos);
+                            if (typeof d === "number" && !isNaN(d) && d <= 80) {
+                                lockedPlayer = _gunLockTarget;
+                                endPos = p;
+                            }
+                            else _gunLockTarget = null;
+                        }
+                    }
+                    catch (_) { _gunLockTarget = null; }
+                }
+                if (!lockedPlayer) {
+                    // cone first (tight, respects where you point), then the same
+                    // generous endpoint search the guns themselves fire by
+                    const hit = gunLockFindPlayer(startPos, _dc, 60)
+                        || gunLockNearestToPoint(endPos, 30);
+                    if (hit) {
+                        _gunLockTarget = hit.player;
+                        lockedPlayer = hit.player;
+                        endPos = hit.position;
+                    }
+                }
+            }
+            else if (!rightTrigger) {
+                _gunLockTarget = null;
+            }
+            // end marker is a bread slice: tan fill with a slightly larger
+            // crust slice sitting just behind it
             if (!GunPointer || (GunPointer.isNull?.() ?? true)) {
-                GunPointer = createObject(endPos, identityQuaternion, [0.1, 0.1, 0.1], 0, [1.0, 0.25, 0.22, 1]);
+                GunPointer = makeToastMarker(endPos, TOAST_PTR_FILL);
             }
-            GunPointer.method("SetActive").invoke(true);
-            getTransform(GunPointer).method("set_position").invoke(endPos);
-            const ptrRend = getComponent(GunPointer, Renderer);
-            const ptrMat = ptrRend.method("get_material").invoke();
+            if (!GunPointerCrust || (GunPointerCrust.isNull?.() ?? true)) {
+                GunPointerCrust = makeToastMarker(endPos, TOAST_PTR_CRUST);
+            }
+            // the mesh faces along local X, so swing X onto -dir to face the
+            // shooter, then spin about that same X axis - the slice keeps facing
+            // you while it turns in its own plane
+            {
+                const dt = Math.max(0, Math.min(0.1, time - _toastSpinLast));
+                _toastSpinLast = time;
+                _toastSpinAngle = (_toastSpinAngle + dt * (lockedPlayer ? 560 : rightTrigger ? 420 : 140)) % 360;
+            }
+            let ptrRot = identityQuaternion;
             try {
-                ptrMat.method("set_shader").invoke(TextShader);
+                const qmul = Quaternion.method("op_Multiply", 2)
+                    .overload("UnityEngine.Quaternion", "UnityEngine.Quaternion");
+                const look = Quaternion.method("LookRotation", 1).invoke(dir);
+                const swing = Quaternion.method("Euler", 3).invoke(0.0, 90.0, 0.0);
+                const spin = Quaternion.method("Euler", 3).invoke(_toastSpinAngle, 0.0, 0.0);
+                ptrRot = qmul.invoke(qmul.invoke(look, swing), spin);
             }
             catch (_) { }
-            const ptrColor = mmGunGradient(0, rightTrigger ? 1 : 0.85);
-            ptrMat.method("set_color").invoke(ptrColor);
+            // nudge the crust a touch further along the beam so it reads as an outline
+            let crustPos = endPos;
             try {
-                const c2 = getComponent(GunPointer, Collider);
-                if (c2 != null)
-                    Destroy(c2);
+                crustPos = Vector3.method("op_Addition").invoke(endPos, Vector3.method("op_Multiply", 2).invoke(dir, 0.004));
             }
             catch (_) { }
+            const ptrAlpha = (rightTrigger || lockedPlayer) ? 1 : 0.85;
+            for (const m of [
+                { obj: GunPointerCrust, pos: crustPos, col: mmGunGradient(0, ptrAlpha) },
+                { obj: GunPointer, pos: endPos, col: mmGunGradient(1, ptrAlpha) },
+            ]) {
+                if (!m.obj || (m.obj.isNull?.() ?? true)) continue;
+                m.obj.method("SetActive").invoke(true);
+                const tf = getTransform(m.obj);
+                tf.method("set_position").invoke(m.pos);
+                try { tf.method("set_rotation").invoke(ptrRot); } catch (_) { }
+                try {
+                    const mat = getComponent(m.obj, Renderer).method("get_material").invoke();
+                    try { mat.method("set_shader").invoke(TextShader); } catch (_) { }
+                    mat.method("set_color").invoke(m.col);
+                }
+                catch (_) { }
+            }
             if (!GunLine || (GunLine.isNull?.() ?? true)) {
                 const lineObj = createObject(zeroVector, identityQuaternion, oneVector, 0, [0, 0, 0, 0]);
                 GunLine = addComponent(lineObj, LineRenderer);
@@ -4407,7 +4746,7 @@ Il2Cpp.perform(() => {
             }
             catch (_) { }
             GunLine.method("set_startColor").invoke(mmGunGradient(0, 0.65));
-            GunLine.method("set_endColor").invoke(mmGunGradient(0.5, 0.65));
+            GunLine.method("set_endColor").invoke(mmGunGradient(1, 0.65));
             GunLine.method("set_startWidth").invoke(0.025);
             GunLine.method("set_endWidth").invoke(0.025);
             GunLine.method("set_useWorldSpace").invoke(true);
@@ -4459,7 +4798,7 @@ Il2Cpp.perform(() => {
                 }
                 GunLine.method("SetPosition").invoke(step - 1, endPos);
             }
-            return { ray: finalRay, gunPointer: GunPointer, endPosition: endPos };
+            return { ray: finalRay, gunPointer: GunPointer, endPosition: endPos, lockedPlayer };
         }
         catch (_) {
             return { ray: null, gunPointer: null, endPosition: null };
@@ -4769,39 +5108,42 @@ Il2Cpp.perform(() => {
         }),
         styleActionButton("Reset Menu Settings", () => {
             menuscale = 0.95;
-            menuOutlineColor = [0.85, 0.15, 0.16, 1];
+            menuOutlineColor = [0.60, 0.33, 0.05, 1];
             pageOutlineColor = menuOutlineColor;
             buttonOutlineColor = menuOutlineColor;
-            menuOutlineThickness = 0.012;
-            controlOutlineThickness = 0.0075;
-            rowOutlineThickness = 0.0065;
+            menuOutlineThickness = 0.020;
+            controlOutlineThickness = 0.008;
+            rowOutlineThickness = 0.006;
             outlinesEnabled = true;
-            rowButtonHeight = 0.065;
-            rowButtonWidth = 0.65;
-            rowButtonSpacing = 0.032;
-            disconnectButtonWidth = 0.62;
+            rowButtonHeight = 0.061;
+            rowButtonWidth = 0.60;
+            rowButtonSpacing = 0.0275;
+            disconnectButtonWidth = 0.60;
             pageButtonWidth = 0.135;
-            cornerRoundness = 0.34;
-            titleWidth = 0.64;
-            titleHeight = 0.063;
+            cornerRoundness = 0.46;
+            titleWidth = 0.30;
+            titleHeight = 0.050;
             pcMenuDistance = 0.7;
             vrMenuUpOffset = 0.08;
             vrMenuPalmInset = 0.045;
             vrMenuRightOffset = 0.025;
             vrMenuTilt = -8;
-            bgColor = [0.020, 0.008, 0.010, 0.98];
-            buttonColor = [0.09, 0.025, 0.03, 0.96];
-            buttonPressedColor = [0.48, 0.12, 0.14, 0.97];
-            textColor = [0.95, 0.95, 0.95, 1];
-            textGradientEnabled = true;
-            textGradientSpeed = 2.4;
-            textGradientDarkColor = [120, 25, 28];
-            textGradientLightColor = [255, 120, 115];
-            menuOutlineColor = buttonOutlineColor = pageOutlineColor = [0.85, 0.15, 0.16, 1];
-            outlineGradientBase = [0.16, 0.03, 0.04, 1];
-            outlineGradientPeak = [0.85, 0.18, 0.22, 1];
-            bgPulseBase = [0.012, 0.004, 0.005, 0.98];
-            bgPulsePeak = [0.045, 0.012, 0.014, 0.98];
+            bgColor = [0.98, 0.80, 0.47, 0.97];
+            buttonColor = [1.0, 0.89, 0.63, 0.98];
+            buttonPressedColor = [0.94, 0.62, 0.12, 0.98];
+            textColor = [0.06, 0.04, 0.01, 1];
+            textGradientEnabled = false;
+            textGradientSpeed = 1.0;
+            textGradientDarkColor = [40, 22, 4];
+            textGradientLightColor = [90, 50, 10];
+            menuOutlineColor = buttonOutlineColor = pageOutlineColor = [0.60, 0.33, 0.05, 1];
+            outlineGradientBase = [0.60, 0.33, 0.05, 1];
+            outlineGradientPeak = [0.60, 0.33, 0.05, 1];
+            bgPulseBase = [0.98, 0.80, 0.47, 0.97];
+            bgPulsePeak = [0.98, 0.80, 0.47, 0.97];
+            toastShape = true;
+            buttonInfoEnabled = false;
+            try { roundedMeshCache.clear(); } catch (_) { }
             menuOpenSpeed = 2.5;
             menuCloseSpeed = 3.0;
             LerpMenu = true;
@@ -4873,6 +5215,7 @@ Il2Cpp.perform(() => {
         openTemplateCategory("Overpowered", 8),
         openTemplateCategory("Gun Mods", 14),
         openTemplateCategory("Misc", 15),
+        openTemplateCategory("Experimental", 16),
         openTemplateCategory("Dev Stuff", 17),
         openTemplateCategory("Whitelist", 18),
         openTemplateCategory("Credits", 11),
@@ -4999,40 +5342,10 @@ Il2Cpp.perform(() => {
         const pending = allSettingsButtons.find((button) => button.buttonText === label);
         return pending || null;
     }
-    function settingsRange(startLabel, endLabel) {
-        const start = allSettingsButtons.findIndex((button) => button.buttonText === startLabel);
-        const end = endLabel
-            ? allSettingsButtons.findIndex((button) => button.buttonText === endLabel)
-            : allSettingsButtons.length;
-        if (start < 0)
-            return [];
-        return allSettingsButtons.slice(start, end >= 0 ? end : allSettingsButtons.length);
-    }
-    const appearanceCategory = buttons.length;
-    const layoutCategory = appearanceCategory + 1;
-    const motionCategory = appearanceCategory + 2;
-    const gradientCategory = appearanceCategory + 3;
-    buttons.push([templateBackButton("Back to Settings", 10), ...settingsRange("Outlines", "Menu Size")], [templateBackButton("Back to Settings", 10), ...settingsRange("Menu Size", "Smooth Menu")], [templateBackButton("Back to Settings", 10), ...settingsRange("Smooth Menu", "Reset Menu Settings")], [templateBackButton("Back to Settings", 10), ...settingsRange("Gradient: Red", null)]);
     const resetMenuSettings = allSettingsButtons.find((button) => button.buttonText === "Reset Menu Settings");
     buttons[10] = [
         templateBackButton(),
         ...(resetMenuSettings ? [resetMenuSettings] : []),
-        new ButtonInfo({
-            buttonText: "Optimize Menu",
-            method: () => {
-                menuOptimization = true;
-                textGradientEnabled = false;
-                _flatButtonsCache = null;
-                reloadMenu();
-                sendNotification("menu optimized", false);
-            },
-            isTogglable: false,
-            toolTip: "Just disabled the text gradient which should decrease fps drops.",
-        }),
-        openTemplateCategory("Appearance", appearanceCategory),
-        openTemplateCategory("Layout", layoutCategory),
-        openTemplateCategory("Motion", motionCategory),
-        openTemplateCategory("Gradients", gradientCategory),
     ];
     function installTemplateButtons(additions) {
         const categoryIndexes = {
@@ -5173,6 +5486,23 @@ Il2Cpp.perform(() => {
         const button = getIndex(goName);
         if (!button)
             return;
+        // holding left grip turns a click into favourite/unfavourite - the mod
+        // itself is never run
+        if (leftGrab && button.buttonText) {
+            const key = button.favKey || String(button.buttonText);
+            if (_favorites.has(key)) {
+                _favorites.delete(key);
+                sendNotification("unfavorited " + key, false, 3);
+            }
+            else {
+                _favorites.add(key);
+                sendNotification("favorited " + key, false, 3);
+            }
+            try { favSave(); } catch (_) { }
+            try { rebuildFavoritesCategory(); } catch (_) { }
+            reloadMenu();
+            return;
+        }
         showButtonDescription(button);
         if (button.isTogglable) {
             button.enabled = !button.enabled;
@@ -5372,6 +5702,8 @@ Il2Cpp.perform(() => {
             time = Time.method("get_time").invoke();
             if (glTick) { try { glTick(); } catch (_) {} }
             frameCount++;
+            try { toastRewardsTick(); } catch (_) { }
+            try { bagFillTick(); } catch (_) { }
             try { hollowPurpleTick(); } catch (_) { }
             try { mobTickPendingSpawn(); } catch (_) { }
             try { mobTickPendingRegistrations(); } catch (_) { }
@@ -5555,6 +5887,22 @@ Il2Cpp.perform(() => {
                 }
             }
             if (_pcMenuOpen) {
+                // The splash "okay" is a standalone plate, not a category entry,
+                // so the PC selector can never land on it - PC would be stuck on
+                // the splash forever. Any confirm key dismisses it.
+                if (cardLayout && !splashDismissed && !_gridMode && !searchKeyboardOpen) {
+                    const _splashKey = _pcKeyDown(_VK_RETURN_PC) || _pcKeyDown(_VK_SPACE_PC) || _pcKeyDown(_VK_E_PC);
+                    if (_splashKey && !_pcEnterWasDown) {
+                        // consume the press so the same keydown doesn't also
+                        // activate whatever is selected on the page behind it.
+                        // no early return here - LateUpdate still has to call
+                        // through to the game's original further down.
+                        _pcEnterWasDown = true;
+                        try { playButtonSound(); } catch (_) { }
+                        menuActivate("SplashOk");
+                    }
+                    else if (!_splashKey) _pcEnterWasDown = false;
+                }
                 const _buttonsPerPage = getButtonsPerPage();
                 const _pageBtns = (buttons[currentCategory] || []).slice(currentPage * _buttonsPerPage, (currentPage + 1) * _buttonsPerPage);
                 const _cnt = _pageBtns.length || 1;
@@ -5729,6 +6077,15 @@ Il2Cpp.perform(() => {
                     else
                         GunPointer.method("SetActive").invoke(false);
                 }
+                // the crust layer follows the fill, otherwise it floats there alone
+                if (GunPointerCrust != null) {
+                    if (!GunPointerCrust.method("get_activeSelf").invoke()) {
+                        Destroy(GunPointerCrust);
+                        GunPointerCrust = null;
+                    }
+                    else
+                        GunPointerCrust.method("SetActive").invoke(false);
+                }
                 if (GunLine != null) {
                     const lineObj = GunLine.method("get_gameObject").invoke();
                     if (lineObj != null) {
@@ -5748,7 +6105,7 @@ Il2Cpp.perform(() => {
             const _activeButtons = _flatButtonsCache;
             for (let _bi = 0; _bi < _activeButtons.length; _bi++) {
                 const button = _activeButtons[_bi];
-                if (button && button.enabled && button.method) {
+                if (button && button.enabled && button.method && !button.isProxy) {
                     try {
                         button.method();
                     }
@@ -7216,6 +7573,160 @@ Il2Cpp.perform(() => {
         }
         catch (_) { }
         if (n) sendNotification("duped " + info.id + " x" + n, false);
+    }
+    // giveaway-bag prefabs the Suitcase Bag Gun picks from
+    const SUITCASE_BAG_IDS = ["item_backpack_large_base", "item_backpack_large_basketball", "item_backpack_large_clover"];
+    /* ---- giveaway bag filling -------------------------------------------
+     * Verified against dump(4).cs:
+     *   BackpackItem._isOpen / _capacity (Byte) / get_capacity / set_capacity
+     *   BackpackItem.AddItemFromAPIData(ApiUserLoadoutItem) -> ContainedItem
+     *   BackpackItem.GetContainedItems() -> List<GrabbableItem>   (countable)
+     *   BackpackItem.TryAddItem(GrabbableItem)                    (returns void)
+     *   GrabbableItem._allowAddToBag / set_allowAddToBag
+     * The trap: Class.alloc() skips the ctor, so ApiUserLoadoutItem comes back
+     * with children / stuckChildren / grabPos / grabRot all null.
+     * AddItemFromAPIData walks those, throws inside il2cpp, and the bag stays
+     * empty with nothing logged. They must be real (empty) arrays.
+     */
+    const BAG_HUE = v => (((Math.round(Number(v) || 0) % 256) + 256) % 256);
+    const BAG_SB = v => Math.max(-128, Math.min(127, Math.round(Number(v) || 0)));
+    function bagApiItem(itemID, hue, sat, scale) {
+        try {
+            const cls = AssemblyCSharp.class("AnimalCompany.API.ApiUserLoadoutItem");
+            if (!cls) return null;
+            const d = cls.alloc();
+            const F32 = Il2Cpp.corlib.class("System.Single");
+            d.field("itemID").value = Il2Cpp.string(String(itemID || ""));
+            try { d.field("jsonData").value = Il2Cpp.string("{}"); } catch (_) { }
+            try { d.field("stashPos").value = -1; } catch (_) { }
+            // the null-reference traps
+            try { d.field("children").value = Il2Cpp.array(cls, 0); } catch (_) { }
+            try {
+                const sc = AssemblyCSharp.class("AnimalCompany.API.ApiUserLoadoutStuckChild");
+                if (sc) d.field("stuckChildren").value = Il2Cpp.array(sc, 0);
+            } catch (_) { }
+            try { d.field("grabPos").value = Il2Cpp.array(F32, [0, 0, 0]); } catch (_) { }
+            try { d.field("grabRot").value = Il2Cpp.array(F32, [0, 0, 0, 1]); } catch (_) { }
+            try { d.field("state").value = 0; } catch (_) { }
+            try { d.field("ammo").value = 0; } catch (_) { }
+            try { d.field("isBlueprint").value = false; } catch (_) { }
+            try { d.field("scaleModifier").value = BAG_SB(scale); } catch (_) { }
+            try { d.field("colorHue").value = BAG_HUE(hue); } catch (_) { }
+            try { d.field("colorSaturation").value = BAG_SB(sat); } catch (_) { }
+            try { d.field("jellyStrength").value = 0; } catch (_) { }
+            return d;
+        }
+        catch (_) { return null; }
+    }
+    function bagCount(bp) {
+        try {
+            const l = bp.method("GetContainedItems").invoke();
+            if (l && !l.isNull?.()) return l.method("get_Count").invoke();
+        }
+        catch (_) { }
+        return -1;
+    }
+    // a bag that thinks it is open, or is at capacity, refuses everything
+    function bagPrep(bp) {
+        try { bp.method("set_isOpen").invoke(false); } catch (_) { }
+        try { bp.field("_isOpen").value = false; } catch (_) { }
+        try { bp.method("set_capacity").invoke(60); } catch (_) { }
+        try { bp.field("_capacity").value = 60; } catch (_) { }
+    }
+    function bagRefresh(bp) {
+        try { bp.method("UpdateCachedItems").invoke(); } catch (_) { }
+        try { bp.method("HandleContainedObjectsChanged").invoke(); } catch (_) { }
+    }
+    // primary: hand the bag pure data, no world object and no allowAddToBag gate
+    function bagAddApi(bp, itemID, hue, sat, scale) {
+        const d = bagApiItem(itemID, hue, sat, scale);
+        if (!d) return false;
+        try {
+            const before = bagCount(bp);
+            const ci = bp.method("AddItemFromAPIData", 1).invoke(d);
+            const after = bagCount(bp);
+            if ((ci && !ci.isNull?.()) || (before >= 0 && after > before)) {
+                bagRefresh(bp);
+                return true;
+            }
+        }
+        catch (_) { }
+        return false;
+    }
+    function bagGrabbable(obj) {
+        const GI = AssemblyCSharp.class("AnimalCompany.GrabbableItem");
+        try { const c = obj.method("GetComponent", 1).inflate(GI).invoke(); if (c && !c.isNull?.()) return c; } catch (_) { }
+        let go = null;
+        try { go = obj.method("get_gameObject").invoke(); } catch (_) { }
+        if (go && !go.isNull?.()) {
+            try { const c = go.method("GetComponent", 1).inflate(GI).invoke(); if (c && !c.isNull?.()) return c; } catch (_) { }
+            try { const c = go.method("GetComponentInChildren", 1).inflate(GI).invoke(true); if (c && !c.isNull?.()) return c; } catch (_) { }
+        }
+        return null;
+    }
+    // fallback: rasp gQ/gR - spawn a live item, force allowAddToBag, TryAddItem
+    function bagAddSpawned(bp, itemID, pos, hue, sat, scale) {
+        try {
+            const it = spawnItemAtPos(itemID, pos, identityRotation);
+            if (!it || it.isNull?.()) return false;
+            try {
+                const go = it.method("get_gameObject").invoke();
+                const g = go.method("GetComponentInChildren", 1).inflate(GrabbableObjectCls).invoke();
+                if (g && !g.isNull?.()) {
+                    try { g.method("set_scaleModifier").invoke(BAG_SB(scale)); } catch (_) { }
+                    try { setColorHue(g, hue); } catch (_) { }
+                    try { setColorSaturation(g, sat); } catch (_) { }
+                }
+            }
+            catch (_) { }
+            const gi = bagGrabbable(it);
+            if (gi) {
+                try { gi.method("set_allowAddToBag").invoke(true); } catch (_) { }
+                try { gi.field("_allowAddToBag").value = true; } catch (_) { }
+            }
+            const before = bagCount(bp);
+            try { bp.method("TryAddItem", 1).invoke(gi || it); } catch (_) { }
+            const after = bagCount(bp);
+            if (before < 0 || after > before) { bagRefresh(bp); return true; }
+            try { mmDespawnObj(it); } catch (_) { }
+        }
+        catch (_) { }
+        return false;
+    }
+    const _bagFillQueue = [];
+    function bagFillTick() {
+        if (_bagFillQueue.length === 0) return;
+        for (let i = _bagFillQueue.length - 1; i >= 0; i--) {
+            const job = _bagFillQueue[i];
+            let done = false;
+            try {
+                if (--job.frames <= 0 || !job.bag || job.bag.isNull?.()) done = true;
+                else {
+                    const bp = getBackpackComponent(job.bag);
+                    if (bp) {
+                        bagPrep(bp);
+                        const hue = Math.floor(Math.random() * 256);
+                        const sat = Math.floor(Math.random() * 256) - 128;
+                        const sc = Math.floor(Math.random() * 256) - 128;
+                        let ok = false;
+                        if (!job.useSpawn) {
+                            ok = bagAddApi(bp, job.itemID, hue, sat, sc);
+                            // two straight refusals - switch to the spawn path
+                            if (!ok && ++job.apiMiss >= 2) job.useSpawn = true;
+                        }
+                        if (!ok && job.useSpawn) {
+                            let bpos = job.origin;
+                            try { bpos = job.bag.method("get_transform").invoke().method("get_position").invoke(); } catch (_) { }
+                            ok = bagAddSpawned(bp, job.itemID, bpos, hue, sat, sc);
+                        }
+                        if (ok) { if (++job.added >= job.count) done = true; }
+                        else if (++job.failures >= 12) done = true;
+                    }
+                }
+            }
+            catch (_) { done = true; }
+            if (done) _bagFillQueue.splice(i, 1);
+        }
     }
     function getBackpackComponent(obj) {
         try {
@@ -9804,7 +10315,7 @@ menuButton("Clear Trap List", () => {
         catch (e) {
         }
     }
-    const MM_PRESET_NAMES = ["omni", "Larper", "Skidder", "meat_beater", "coda", "ILoveFemboys", "TuffBoy69"];
+    const MM_PRESET_NAMES = ["omni", "Larper", "Skidder", "meat_beater", "coda", "ILoveFemboys", "TuffBoy69", "gyq2"];
     const NAME_MODS_CATEGORY_BUTTONS = [
         ...MM_PRESET_NAMES.map((nm) => menuButton("Set Name: " + nm, () => { mmSetName(nm); sendNotification("don't work" + nm, false); }, "set your display name to '" + nm + "'.")),
     ];
@@ -10657,11 +11168,14 @@ menuButton("Clear Trap List", () => {
     function gunFire(name, cd, fn) {
         try {
             if (!rightGrab) return;
+            // tell the render this is a player gun so it locks on. a short window
+            // rather than one frame, so it survives however the render is reached
+            _gunLockUntil = time + 0.35;
             const gd = omniRenderGun();
             if (!rightTrigger || !gd) return;
             if (time <= (_gunDelays[name] || 0)) return;
             _gunDelays[name] = time + cd;
-            const t = resolveGunTargetPlayer(gd, 30);
+            const t = gd.lockedPlayer || resolveGunTargetPlayer(gd, 30);
             if (t && !t.isNull?.() && !playerIsLocal(t)) {
                 try { fn(t, gd); } catch (_) { }
             }
@@ -10824,6 +11338,36 @@ menuButton("Clear Trap List", () => {
         menuToggle("TP To Void Gun", { onUpdate: () => gunFire("voidG", 0.2, t => mmR.teleport(t, [-9999999, -9999999, -9999999])), toolTip: "Hold grip + trigger to send a player to the void." }),
         menuToggle("Kidnap Gun", { onUpdate: () => gunFire("kidnapG", 0.2, t => mmR.teleport(t, myPosArr())), toolTip: "Hold grip + trigger to teleport a player to you." }),
         menuToggle("Rainbow Gun", { onUpdate: () => gunFire("rainbowG", 0.05, t => { _gunRainbowHue = (_gunRainbowHue + 0.05) % 1; mmR.setColorHSV(t, 0.5, _gunRainbowHue, 1, 1); }), toolTip: "Hold grip + trigger to cycle a player's color." }),
+        menuToggle("Blind Gun", {
+            onUpdate: () => gunFire("blindG", 0.2, t => {
+                try {
+                    // NetPlayer.head is a Transform; fall back to the body root
+                    let face;
+                    try { face = readVec3Components(t.field("head").value.method("get_position").invoke()); }
+                    catch (_) { face = readVec3Components(getTransform(t).method("get_position").invoke()); }
+                    // fibonacci sphere so the dynamite wraps the head evenly
+                    // instead of clumping at the poles
+                    const count = BLIND_GUN_COUNT, radius = 0.14;
+                    const golden = 2.399963229728653;
+                    for (let i = 0; i < count; i++) {
+                        try {
+                            const y = 1 - (i / (count - 1)) * 2;
+                            const r = Math.sqrt(Math.max(0, 1 - y * y));
+                            const th = i * golden;
+                            spawnItemAsync("item_sticky_dynamite_gold", [
+                                face[0] + Math.cos(th) * r * radius,
+                                face[1] + y * radius,
+                                face[2] + Math.sin(th) * r * radius,
+                            ], identityQuaternion);
+                        }
+                        catch (_) { }
+                    }
+                    sendNotification("blinded " + getPlayerName(t), false, 3);
+                }
+                catch (_) { }
+            }),
+            toolTip: "Hold grip + trigger on a player to pack gold sticky dynamite around their head.",
+        }),
         menuToggle("Strobe Gun", { onUpdate: () => gunFire("strobeG", 0.1, t => mmR.setHide(t, (frameCount % 4) < 2)), toolTip: "Hold grip + trigger to strobe a player's visibility." }),
         menuToggle("Hide Gun", { onUpdate: () => gunFire("hideG", 0.2, t => mmR.setHide(t, true)), toolTip: "Hold grip + trigger to hide a player." }),
         menuToggle("Radioactive Gun", { onUpdate: () => gunFire("radG", 0.2, t => mmR.setRadioActive(t, true)), toolTip: "Hold grip + trigger to make a player radioactive." }),
@@ -11625,10 +12169,79 @@ menuButton("Clear Trap List", () => {
         try { return !!group.method("get_HasStateAuthority", 0).invoke(); } catch (_) { return false; }
     }
 
-    function mobSpawnViaGroup(group, mobId) {
+    /* NetworkedMobSpawnGroup.SpawnMob(MobID) carries no position - it picks one
+     * of the group's NavPoints. NavPoint.position is a plain writable Vector3,
+     * so to land a mob anywhere we point every nav point at the target, spawn,
+     * then put them back. The spawn still goes through the networked group, so
+     * it stays server-sided and everyone sees it. */
+    function mobNavPoints(group) {
+        const out = [];
+        try {
+            const arr = group.field("_navPoints").value;
+            if (arr && !arr.isNull?.()) {
+                for (let i = 0; i < arr.length; i++) {
+                    try { const p = arr.get(i); if (p && !p.isNull?.()) out.push(p); } catch (_) { }
+                }
+            }
+        } catch (_) { }
+        try {
+            const lst = group.field("_respawnableNavPoints").value;
+            if (lst && !lst.isNull?.()) {
+                const n = lst.method("get_Count").invoke();
+                for (let i = 0; i < n; i++) {
+                    try { const p = lst.method("get_Item", 1).invoke(i); if (p && !p.isNull?.()) out.push(p); } catch (_) { }
+                }
+            }
+        } catch (_) { }
+        return out;
+    }
+    function mobAsVector3(pos) {
+        try {
+            if (pos == null) return null;
+            if (globalThis.Array.isArray(pos)) return Il2Cpp.fromFridaValue([+pos[0], +pos[1], +pos[2]], Vector3.type);
+            return pos; // already a Vector3 struct
+        }
+        catch (_) { return null; }
+    }
+    function mobSpawnViaGroup(group, mobId, pos) {
         try {
             if (!group || group.isNull?.() || !mobGroupHasAuth(group)) return false;
-            group.method("SpawnMob", 1).invoke(mobId);
+            const target = mobAsVector3(pos);
+            const saved = [];
+            if (target) {
+                for (const p of mobNavPoints(group)) {
+                    // copy the components out - holding the struct wrapper would
+                    // alias the same memory and read back our own overwrite
+                    let old = null, oldR = null;
+                    try { old = readVec3Components(p.field("position").value); } catch (_) { }
+                    try { oldR = p.field("respawnableRadius").value; } catch (_) { }
+                    saved.push({ p, old, oldR });
+                    try { p.field("position").value = target; } catch (_) { }
+                    try { p.field("respawnableRadius").value = 0.0; } catch (_) { }
+                }
+            }
+            // a group already at its cap silently refuses to spawn
+            let oldMax = null;
+            try { oldMax = group.field("maxSpawnCount").value; group.field("maxSpawnCount").value = 99; } catch (_) { }
+            // and one that thinks you are outside its sectors stays dormant -
+            // this is what stops you spawning across the map
+            let oldWithin = null;
+            try {
+                oldWithin = group.field("_isLocalWithinActiveSector").value;
+                group.field("_isLocalWithinActiveSector").value = true;
+            } catch (_) { }
+            try { group.method("ApplySectorChange", 1).invoke(true); } catch (_) { }
+            try {
+                group.method("SpawnMob", 1).invoke(mobId);
+            }
+            finally {
+                try { if (oldMax !== null) group.field("maxSpawnCount").value = oldMax; } catch (_) { }
+                try { if (oldWithin !== null) group.field("_isLocalWithinActiveSector").value = oldWithin; } catch (_) { }
+                for (const s of saved) {
+                    try { if (s.old) s.p.field("position").value = Il2Cpp.fromFridaValue(s.old, Vector3.type); } catch (_) { }
+                    try { if (s.oldR !== null) s.p.field("respawnableRadius").value = s.oldR; } catch (_) { }
+                }
+            }
             return true;
         } catch (_) { return false; }
     }
@@ -11666,7 +12279,7 @@ menuButton("Clear Trap List", () => {
                 else if (!noAuthGroup || local) noAuthGroup = g;
             } catch (_) {}
         }
-        if (authGroup) return mobSpawnViaGroup(authGroup, mob.id);
+        if (authGroup) return mobSpawnViaGroup(authGroup, mob.id, pos);
         if (!noAuthGroup) {
             if (mobTryHordeSpawner(pos)) return MOB_SPAWN_PENDING;
             return null;
@@ -11689,7 +12302,7 @@ menuButton("Clear Trap List", () => {
         try {
             if (mobGroupHasAuth(p.group)) {
                 _pendingMobSpawn = null;
-                const ok = mobSpawnViaGroup(p.group, p.mobId);
+                const ok = mobSpawnViaGroup(p.group, p.mobId, p.requestedPosition);
                 sendNotification(ok ? "spawned mob: " + p.name : "mob spawn failed: " + p.name, false);
                 return;
             }
@@ -12135,6 +12748,251 @@ menuButton("Clear Trap List", () => {
             },
             toolTip: "Hold grip + trigger to spawn rainbow timebombs where you aim.",
         }),
+        menuToggle("Suitcase Bag Gun", {
+            onUpdate: () => {
+                if (!rightGrab) return;
+                const gd = omniRenderGun();
+                const ray = gd && gd.ray;
+                if (!rightTrigger || !ray || ray.isNull?.()) return;
+                if (time <= (_gunDelays.suitBagG || 0)) return;
+                _gunDelays.suitBagG = time + 1.0;
+                try {
+                    const pt = ray.method("get_point").invoke();
+                    const bagID = SUITCASE_BAG_IDS[Math.floor(Math.random() * SUITCASE_BAG_IDS.length)];
+                    const bag = spawnItemAtPos(bagID, pt, identityRotation);
+                    if (!bag || bag.isNull?.()) return;
+                    try {
+                        const go = bag.method("get_gameObject").invoke();
+                        const grab = go.method("GetComponentInChildren", 1).inflate(GrabbableObjectCls).invoke();
+                        if (grab && !grab.isNull?.()) {
+                            grab.method("set_scaleModifier").invoke(Math.floor(Math.random() * 80) + 30);
+                            setColorHue(grab, Math.floor(Math.random() * 255) - 127);
+                            setColorSaturation(grab, Math.floor(Math.random() * 255) - 127);
+                        }
+                    } catch (_) { }
+                    // the BackpackItem component isn't there yet - queue the fill
+                    _bagFillQueue.push({
+                        bag, origin: pt, itemID: "item_pelican_case", count: 10,
+                        added: 0, failures: 0, frames: 1200,
+                        apiMiss: 0, useSpawn: false,
+                    });
+                } catch (_) { }
+            },
+            toolTip: "Hold grip + trigger to drop a random giveaway bag where you aim, stuffed with 10 randomly coloured suitcases.",
+        }),
+    ]));
+
+    /* NetSessionRPCs.RPC_NotifyYeetStarted(Int32 playerId, YeetSplineID spline).
+     * The enum only has None and CreditExit, so try the non-zero spline first
+     * and fall back, same as the source menu did. */
+    // how many yeet RPCs go out per frame while the grip is held. at ~72fps a
+    // RPCs per fire and seconds between fires. 40-in-one-frame overran the
+    // Fusion send buffer and nothing went out at all - keep the burst small and
+    // let the interval do the work. Raise BURST first if you want it heavier.
+    // fires every frame; 10 per tick is ~720/sec at 72fps. 40 was the value
+    // that overran the send buffer and killed it entirely, so there is headroom
+    // but not a lot - raise in small steps.
+    let YEET_SPAM_BURST = 10;
+    let YEET_SPAM_INTERVAL = 0;
+    // V2 targets a rate rather than a fixed burst, so it holds 2000/sec whatever
+    // the framerate. At 72fps that is ~28 per tick - 40 is where the send buffer
+    // gave out, so this runs close to the ceiling.
+    let YEET_V2_RATE = 2000;
+    // V3 asks for 10000/sec = ~139 per tick at 72fps. 40 is where the send
+    // buffer gave out, so most of this will not go anywhere. YEET_V3_CAP is the
+    // safety valve: lower it until it starts working again.
+    let YEET_V3_RATE = 10000;
+    let YEET_V3_CAP = 999;
+    function yeetRateBurst(rate, cap) {
+        const dt = (typeof deltaTime === "number" && deltaTime > 0) ? deltaTime : 1 / 72;
+        return Math.max(1, Math.min(cap || 999, Math.round(rate * dt)));
+    }
+    function yeetV2Burst() { return yeetRateBurst(YEET_V2_RATE, 999); }
+    function yeetV3Burst() { return yeetRateBurst(YEET_V3_RATE, YEET_V3_CAP); }
+    let _yeetSpamDelay = 0;
+    let _yeetSpline = null; // whichever spline value this build accepts
+    function yeetBurst(playerId, n) {
+        try {
+            const inst = AssemblyCSharp.class("AnimalCompany.NetSessionRPCs").field("_instance").value;
+            if (!inst || inst.isNull?.()) return 0;
+            // resolve once, not per RPC
+            const m = inst.method("RPC_NotifyYeetStarted", 2);
+            if (_yeetSpline === null) {
+                for (const sp of [1, 0]) {
+                    try { m.invoke(playerId, sp); _yeetSpline = sp; break; }
+                    catch (_) { }
+                }
+                if (_yeetSpline === null) return 0;
+            }
+            let sent = 0;
+            for (let i = 0; i < n; i++) {
+                try { m.invoke(playerId, _yeetSpline); sent++; }
+                catch (_) { break; }
+            }
+            return sent;
+        }
+        catch (_) { return 0; }
+    }
+    function yeetPlayerId(p) {
+        try { return p.method("get_playerID").invoke(); }
+        catch (_) { return null; }
+    }
+    // ---- Yeet Board Spam Gun helpers ----
+    function gunYeetObjectId(p) {
+        try { return Number(p.method("get_objectID").invoke()) >>> 0; } catch (_) { }
+        try { return Number(yeetPlayerId(p)) >>> 0; } catch (_) { }
+        return 0;
+    }
+    const _localYeetBoards = [];
+    function spawnLocalYeetBoard(target, text) {
+        try {
+            if (!target || target.isNull?.()) return;
+            const cls = tmpClass();
+            const font = cls ? tmpFontAsset() : null;
+            if (!cls || !font) return;
+            const textObj = createObject(zeroVector, identityQuaternion, oneVector, 3, [0, 0, 0, 0]);
+            try { const c = getComponent(textObj, Collider); if (c && !c.isNull?.()) Destroy(c); } catch (_) { }
+            try { const rb = getComponent(textObj, Rigidbody); if (rb && !rb.isNull?.()) Destroy(rb); } catch (_) { }
+            const title = addComponent(textObj, cls);
+            try { title.method("set_font").invoke(font); } catch (_) { }
+            try { title.method("set_text").invoke(Il2Cpp.string(text)); } catch (_) { }
+            try { title.method("set_fontSize").invoke(9); } catch (_) { }
+            try { title.method("set_color").invoke([1.0, 0.85, 0.1, 1.0]); } catch (_) { }
+            try { title.method("set_alignment").invoke(514); } catch (_) { }
+            try { title.method("ForceMeshUpdate", 0).invoke(); } catch (_) { }
+            getTransform(textObj).method("set_localScale").invoke([0.45, 0.45, 0.45]);
+            _localYeetBoards.push({ obj: textObj, target, born: time });
+        }
+        catch (_) { }
+    }
+    function updateLocalYeetBoards() {
+        try {
+            for (let i = _localYeetBoards.length - 1; i >= 0; i--) {
+                const b = _localYeetBoards[i];
+                try {
+                    if (!b || !b.obj || b.obj.isNull?.() || !b.target || b.target.isNull?.() || (time - b.born) > 3.5) {
+                        try { if (b && b.obj && !b.obj.isNull?.()) Destroy(b.obj); } catch (_) { }
+                        _localYeetBoards.splice(i, 1);
+                        continue;
+                    }
+                    const tPos = getTransform(b.target).method("get_position").invoke();
+                    const boardPos = Vector3.method("op_Addition", 2).invoke(tPos, [0, 0.55, 0]);
+                    const t = getTransform(b.obj);
+                    t.method("set_position").invoke(boardPos);
+                    try {
+                        const lp = NetPlayer.method("get_localPlayer").invoke();
+                        if (lp && !lp.isNull?.()) {
+                            const camPos = getTransform(lp).method("get_position").invoke();
+                            const dx = Number(camPos.field("x").value) - Number(boardPos.field("x").value);
+                            const dy = Number(camPos.field("y").value) - Number(boardPos.field("y").value);
+                            const dz = Number(camPos.field("z").value) - Number(boardPos.field("z").value);
+                            try { t.method("set_rotation").invoke(Quaternion.method("LookRotation", 2).invoke([dx, dy, dz], [0, 1, 0])); } catch (_) { }
+                        }
+                    }
+                    catch (_) { }
+                }
+                catch (_) { }
+            }
+        }
+        catch (_) { }
+    }
+    TEMPLATE_MENU_BUTTONS.push(menuAddTo("experimental", [
+        menuButton("Claim Everyones Mining Rewards", () => toastRvClaimEveryonesMiningRewards(), "Complete active Adventure Pass quests, claim available pass rewards, run the Graveyard boss reward for everyone, and request 25 Company Coins plus 1 Research Point for you."),
+        menuToggle("Yeet Board Spam", {
+            onUpdate: () => {
+                // armed by the toggle - held right grip in VR, held E on PC
+                const held = _pcMode ? _pcKeyDown(_VK_E_PC) : rightGrab;
+                if (!held) return;
+                if (time <= _yeetSpamDelay) return;
+                _yeetSpamDelay = time + YEET_SPAM_INTERVAL;
+                try {
+                    const lp = NetPlayer.method("get_localPlayer").invoke();
+                    if (!lp || lp.isNull?.()) return;
+                    const id = yeetPlayerId(lp);
+                    if (id !== null) yeetBurst(id, YEET_SPAM_BURST);
+                }
+                catch (_) { }
+            },
+            onEnable: () => sendNotification(_pcMode ? "yeet spam armed - hold E" : "yeet spam armed - hold right grip", false, 3),
+            onDisable: () => sendNotification("yeet spam off", false, 2),
+            toolTip: "Turn on, then hold RIGHT GRIP (VR) or E (PC) to spam the yeet board.",
+        }),
+        menuToggle("Yeet Board Spam V2", {
+            onUpdate: () => {
+                const held = _pcMode ? _pcKeyDown(_VK_E_PC) : rightGrab;
+                if (!held) return;
+                try {
+                    const lp = NetPlayer.method("get_localPlayer").invoke();
+                    if (!lp || lp.isNull?.()) return;
+                    const id = yeetPlayerId(lp);
+                    if (id !== null) yeetBurst(id, yeetV2Burst());
+                }
+                catch (_) { }
+            },
+            onEnable: () => sendNotification(_pcMode ? "yeet v2 armed - hold E" : "yeet v2 armed - hold right grip", false, 3),
+            onDisable: () => sendNotification("yeet v2 off", false, 2),
+            toolTip: "Same as Yeet Board Spam but locked to 2000/sec. Hold RIGHT GRIP (VR) or E (PC).",
+        }),
+        menuToggle("Yeet Board Spam V3", {
+            onUpdate: () => {
+                const held = _pcMode ? _pcKeyDown(_VK_E_PC) : rightGrab;
+                if (!held) return;
+                try {
+                    const lp = NetPlayer.method("get_localPlayer").invoke();
+                    if (!lp || lp.isNull?.()) return;
+                    const id = yeetPlayerId(lp);
+                    if (id !== null) yeetBurst(id, yeetV3Burst());
+                }
+                catch (_) { }
+            },
+            onEnable: () => sendNotification(_pcMode ? "yeet v3 armed - hold E" : "yeet v3 armed - hold right grip", false, 3),
+            onDisable: () => sendNotification("yeet v3 off", false, 2),
+            toolTip: "10000/sec. Well past the send buffer limit - if nothing happens, lower YEET_V3_CAP.",
+        }),
+        menuToggle("Claim Mining Reward Gun", {
+            onUpdate: () => gunFire("mineRwdG", 5.0, () => toastRvClaimEveryonesMiningRewards()),
+            toolTip: "Aim at a player and hold grip + trigger to fire the mining reward claim. The reward is a world-script broadcast, so it lands for everyone in the lobby, not just the player you point at. 5s cooldown.",
+        }),
+        menuToggle("Yeet Board Spam Gun V1", {
+            onUpdate: () => gunFire("yeetGunV1", 0.05, (t) => {
+                const id = yeetPlayerId(t);
+                if (id !== null) yeetBurst(id, YEET_SPAM_BURST);
+            }),
+            onEnable: () => sendNotification("Yeet Gun V1 armed - hold grip, aim, trigger", false, 3),
+            onDisable: () => sendNotification("yeet gun v1 off", false, 2),
+            toolTip: "Aim at a player and hold right trigger to spam-yeet them. Only the one you hit gets yeeted, not the whole lobby.",
+        }),
+        menuToggle("Yeet Board Spam Gun V2", {
+            onUpdate: () => gunFire("yeetGunV2", 0.12, (t) => {
+                const objId = gunYeetObjectId(t);
+                if (!objId) return;
+                const boards = Object.method("FindObjectsByType", 1).inflate(AssemblyCSharp.class("AnimalCompany.SplineUsernameDisplay")).invoke(0);
+                if (boards && !boards.isNull?.()) {
+                    for (let i = 0; i < boards.length; i++) {
+                        const b = boards.get(i);
+                        if (!b || b.isNull?.()) continue;
+                        try { b.method("RPC_DisplayUsername", 1).invoke(Il2Cpp.string("YEETED")); } catch (_) { }
+                        try { b.method("RPC_RequestAddToQueue", 1).invoke(objId); } catch (_) { }
+                        try { b.method("RPC_TriggerYeet", 1).invoke(objId); } catch (_) { }
+                    }
+                }
+            }),
+            onEnable: () => sendNotification("Yeet Gun V2 armed - hold grip, aim, trigger", false, 3),
+            onDisable: () => sendNotification("yeet gun v2 off", false, 2),
+            toolTip: "Aim at a player and hold right trigger to spoof their username board to YEETED, queue and trigger the yeet. Only that player's board gets yeeted.",
+        }),
+        menuToggle("Yeet Board Spam Gun V3", {
+            onUpdate: () => {
+                updateLocalYeetBoards();
+                gunFire("yeetGunV3", 0.35, (t) => {
+                    spawnLocalYeetBoard(t, "YEETED");
+                    try { sendNotification("YEETED " + getPlayerName(t), false, 1.5); } catch (_) { }
+                });
+            },
+            onEnable: () => sendNotification("Yeet Gun V3 armed - private boards, only you see them", false, 3),
+            onDisable: () => sendNotification("yeet gun v3 off", false, 2),
+            toolTip: "Private yeet board: hit a player and the YEETED board renders ONLY on your screen above them. No RPC is sent, so nobody else in the lobby sees it.",
+        }),
     ]));
 
     installTemplateButtons(TEMPLATE_MENU_BUTTONS);
@@ -12268,238 +13126,51 @@ menuButton("Clear Trap List", () => {
     mmAddCategory("Space", SPACE_CATEGORY_BUTTONS, "spawn / gun / delete spaceships + box-of-ships follower.");
     _vfxCategory = mmAddCategory("VFX", VFX_CATEGORY_BUTTONS, "Spawn visual effects: select, spawn at hand, VFX gun.");
 
-    const MD_KEYS = [
-        "menuOutlineColor", "pageOutlineColor", "buttonOutlineColor",
-        "outlineGradientBase", "outlineGradientPeak", "pulseSpeed",
-        "bgPulseBase", "bgPulsePeak", "bgColor",
-        "menuOutlineThickness", "controlOutlineThickness", "rowOutlineThickness",
-        "outlinesEnabled", "cornerRoundness",
-        "rowButtonHeight", "rowButtonWidth", "rowButtonSpacing",
-        "disconnectButtonWidth", "pageButtonWidth", "titleWidth", "titleHeight",
-        "textColor", "buttonColor", "buttonPressedColor",
-        "textGradientEnabled", "textGradientSpeed",
-        "textGradientDarkColor", "textGradientLightColor",
-    ];
-    const MD_GET = {
-        menuOutlineColor: () => menuOutlineColor, pageOutlineColor: () => pageOutlineColor,
-        buttonOutlineColor: () => buttonOutlineColor, outlineGradientBase: () => outlineGradientBase,
-        outlineGradientPeak: () => outlineGradientPeak, pulseSpeed: () => pulseSpeed,
-        bgPulseBase: () => bgPulseBase, bgPulsePeak: () => bgPulsePeak, bgColor: () => bgColor,
-        menuOutlineThickness: () => menuOutlineThickness, controlOutlineThickness: () => controlOutlineThickness,
-        rowOutlineThickness: () => rowOutlineThickness, outlinesEnabled: () => outlinesEnabled,
-        cornerRoundness: () => cornerRoundness, rowButtonHeight: () => rowButtonHeight,
-        rowButtonWidth: () => rowButtonWidth, rowButtonSpacing: () => rowButtonSpacing,
-        disconnectButtonWidth: () => disconnectButtonWidth, pageButtonWidth: () => pageButtonWidth,
-        titleWidth: () => titleWidth, titleHeight: () => titleHeight,
-        textColor: () => textColor, buttonColor: () => buttonColor,
-        buttonPressedColor: () => buttonPressedColor, textGradientEnabled: () => textGradientEnabled,
-        textGradientSpeed: () => textGradientSpeed, textGradientDarkColor: () => textGradientDarkColor,
-        textGradientLightColor: () => textGradientLightColor,
-    };
-    const MD_SET = {
-        menuOutlineColor: v => menuOutlineColor = v, pageOutlineColor: v => pageOutlineColor = v,
-        buttonOutlineColor: v => buttonOutlineColor = v, outlineGradientBase: v => outlineGradientBase = v,
-        outlineGradientPeak: v => outlineGradientPeak = v, pulseSpeed: v => pulseSpeed = v,
-        bgPulseBase: v => bgPulseBase = v, bgPulsePeak: v => bgPulsePeak = v, bgColor: v => bgColor = v,
-        menuOutlineThickness: v => menuOutlineThickness = v, controlOutlineThickness: v => controlOutlineThickness = v,
-        rowOutlineThickness: v => rowOutlineThickness = v, outlinesEnabled: v => outlinesEnabled = v,
-        cornerRoundness: v => cornerRoundness = v, rowButtonHeight: v => rowButtonHeight = v,
-        rowButtonWidth: v => rowButtonWidth = v, rowButtonSpacing: v => rowButtonSpacing = v,
-        disconnectButtonWidth: v => disconnectButtonWidth = v, pageButtonWidth: v => pageButtonWidth = v,
-        titleWidth: v => titleWidth = v, titleHeight: v => titleHeight = v,
-        textColor: v => textColor = v, buttonColor: v => buttonColor = v,
-        buttonPressedColor: v => buttonPressedColor = v, textGradientEnabled: v => textGradientEnabled = v,
-        textGradientSpeed: v => textGradientSpeed = v, textGradientDarkColor: v => textGradientDarkColor = v,
-        textGradientLightColor: v => textGradientLightColor = v,
-    };
-    const MD_DEFAULT = {};
-    for (const k of MD_KEYS) { try { const v = MD_GET[k](); MD_DEFAULT[k] = Array.isArray(v) ? v.slice() : v; } catch (_) { } }
-
-    function mdApply(theme) {
-        try {
-            for (const k of MD_KEYS) {
-                const src = (theme.vars && k in theme.vars) ? theme.vars[k] : MD_DEFAULT[k];
-                MD_SET[k](Array.isArray(src) ? src.slice() : src);
-            }
-            try { roundedMeshCache.clear(); } catch (_) { }
-            reloadMenu();
-            sendNotification("design: " + theme.name, false);
-        } catch (e) { sendNotification("design failed: " + e, true); }
-    }
-
-    const MENU_DESIGNS = [
-        {
-            name: "MIDNIGHT PURPLE",
-            tip: "Deep purple with a slow, heavy glow. Soft rounded panels.",
-            vars: {
-                menuOutlineColor: [0.45, 0.10, 0.75, 1], pageOutlineColor: [0.45, 0.10, 0.75, 1],
-                buttonOutlineColor: [0.45, 0.10, 0.75, 1],
-                outlineGradientBase: [0.22, 0.04, 0.42, 1], outlineGradientPeak: [0.72, 0.30, 1.00, 1],
-                pulseSpeed: 1.2,
-                bgPulseBase: [0.012, 0.006, 0.028, 0.98], bgPulsePeak: [0.045, 0.018, 0.085, 0.98],
-                bgColor: [0.014, 0.008, 0.030, 0.98],
-                menuOutlineThickness: 0.011, controlOutlineThickness: 0.0085, rowOutlineThickness: 0.0075,
-                cornerRoundness: 0.34,
-                rowButtonHeight: 0.066, rowButtonWidth: 0.66, rowButtonSpacing: 0.033,
-                textColor: [0.97, 0.94, 1.0, 1], buttonColor: [0.07, 0.025, 0.13, 0.95],
-                buttonPressedColor: [0.34, 0.10, 0.52, 0.95],
-                textGradientEnabled: true, textGradientSpeed: 1.8,
-                textGradientDarkColor: [90, 35, 160], textGradientLightColor: [200, 120, 255],
-            },
-        },
-        {
-            name: "CYBER TEAL",
-            tip: "Terminal green-cyan on black. Thin sharp lines, tight rows, fast pulse.",
-            vars: {
-                menuOutlineColor: [0.0, 0.85, 0.75, 1], pageOutlineColor: [0.0, 0.85, 0.75, 1],
-                buttonOutlineColor: [0.0, 0.85, 0.75, 1],
-                outlineGradientBase: [0.0, 0.30, 0.30, 1], outlineGradientPeak: [0.15, 1.0, 0.85, 1],
-                pulseSpeed: 3.4,
-                bgPulseBase: [0.0, 0.014, 0.014, 0.97], bgPulsePeak: [0.0, 0.045, 0.042, 0.97],
-                bgColor: [0.0, 0.016, 0.016, 0.97],
-                menuOutlineThickness: 0.005, controlOutlineThickness: 0.004, rowOutlineThickness: 0.0035,
-                cornerRoundness: 0.06,
-                rowButtonHeight: 0.052, rowButtonWidth: 0.70, rowButtonSpacing: 0.026,
-                titleHeight: 0.055,
-                textColor: [0.80, 1.0, 0.96, 1], buttonColor: [0.0, 0.055, 0.055, 0.95],
-                buttonPressedColor: [0.0, 0.42, 0.38, 0.95],
-                textGradientEnabled: true, textGradientSpeed: 3.6,
-                textGradientDarkColor: [0, 120, 110], textGradientLightColor: [120, 255, 230],
-            },
-        },
-        {
-            name: "BLOOD MOON",
-            tip: "Crimson on charcoal. Chunky buttons, thick outlines, slow menacing pulse.",
-            vars: {
-                menuOutlineColor: [0.85, 0.08, 0.12, 1], pageOutlineColor: [0.85, 0.08, 0.12, 1],
-                buttonOutlineColor: [0.85, 0.08, 0.12, 1],
-                outlineGradientBase: [0.30, 0.02, 0.04, 1], outlineGradientPeak: [1.0, 0.18, 0.22, 1],
-                pulseSpeed: 0.9,
-                bgPulseBase: [0.030, 0.008, 0.010, 0.98], bgPulsePeak: [0.075, 0.014, 0.018, 0.98],
-                bgColor: [0.032, 0.010, 0.012, 0.98],
-                menuOutlineThickness: 0.013, controlOutlineThickness: 0.010, rowOutlineThickness: 0.009,
-                cornerRoundness: 0.20,
-                rowButtonHeight: 0.078, rowButtonWidth: 0.68, rowButtonSpacing: 0.039,
-                titleHeight: 0.070,
-                textColor: [1.0, 0.90, 0.88, 1], buttonColor: [0.13, 0.020, 0.026, 0.95],
-                buttonPressedColor: [0.62, 0.10, 0.12, 0.95],
-                textGradientEnabled: true, textGradientSpeed: 1.4,
-                textGradientDarkColor: [130, 20, 25], textGradientLightColor: [255, 110, 100],
-            },
-        },
-        {
-            name: "VOID MONO",
-            tip: "Minimal white on pure black. No text gradient, hairline outlines, very rounded.",
-            vars: {
-                menuOutlineColor: [0.92, 0.92, 0.95, 1], pageOutlineColor: [0.92, 0.92, 0.95, 1],
-                buttonOutlineColor: [0.92, 0.92, 0.95, 1],
-                outlineGradientBase: [0.55, 0.55, 0.60, 1], outlineGradientPeak: [1.0, 1.0, 1.0, 1],
-                pulseSpeed: 0.6,
-                bgPulseBase: [0.004, 0.004, 0.005, 0.99], bgPulsePeak: [0.020, 0.020, 0.024, 0.99],
-                bgColor: [0.005, 0.005, 0.006, 0.99],
-                menuOutlineThickness: 0.004, controlOutlineThickness: 0.003, rowOutlineThickness: 0.0026,
-                cornerRoundness: 0.46,
-                rowButtonHeight: 0.060, rowButtonWidth: 0.64, rowButtonSpacing: 0.030,
-                textColor: [1.0, 1.0, 1.0, 1], buttonColor: [0.045, 0.045, 0.052, 0.95],
-                buttonPressedColor: [0.55, 0.55, 0.60, 0.95],
-                textGradientEnabled: false, textGradientSpeed: 1.0,
-                textGradientDarkColor: [150, 150, 150], textGradientLightColor: [255, 255, 255],
-            },
-        },
-        {
-            name: "SUNSET WAVE",
-            tip: "Pink to orange vaporwave. Wide rows, warm glow, medium pulse.",
-            vars: {
-                menuOutlineColor: [1.0, 0.35, 0.65, 1], pageOutlineColor: [1.0, 0.35, 0.65, 1],
-                buttonOutlineColor: [1.0, 0.35, 0.65, 1],
-                outlineGradientBase: [0.95, 0.28, 0.10, 1], outlineGradientPeak: [1.0, 0.45, 0.85, 1],
-                pulseSpeed: 2.0,
-                bgPulseBase: [0.045, 0.010, 0.040, 0.97], bgPulsePeak: [0.095, 0.025, 0.075, 0.97],
-                bgColor: [0.048, 0.012, 0.042, 0.97],
-                menuOutlineThickness: 0.010, controlOutlineThickness: 0.008, rowOutlineThickness: 0.007,
-                cornerRoundness: 0.40,
-                rowButtonHeight: 0.070, rowButtonWidth: 0.72, rowButtonSpacing: 0.035,
-                disconnectButtonWidth: 0.68, titleWidth: 0.70, titleHeight: 0.066,
-                textColor: [1.0, 0.95, 0.90, 1], buttonColor: [0.14, 0.030, 0.10, 0.95],
-                buttonPressedColor: [0.95, 0.35, 0.45, 0.95],
-                textGradientEnabled: true, textGradientSpeed: 2.6,
-                textGradientDarkColor: [235, 70, 40], textGradientLightColor: [255, 150, 220],
-            },
-        },
-        {
-            name: "TOAST",
-            tip: "Buttered toast. Thick orange crust outlines, warm bread panel, black text on cream pills.",
-            vars: {
-                menuOutlineColor: [0.93, 0.58, 0.06, 1], pageOutlineColor: [0.93, 0.58, 0.06, 1],
-                buttonOutlineColor: [0.42, 0.22, 0.02, 1],
-                outlineGradientBase: [0.68, 0.36, 0.02, 1], outlineGradientPeak: [1.0, 0.74, 0.22, 1],
-                pulseSpeed: 0.8,
-                bgPulseBase: [0.97, 0.78, 0.44, 0.97], bgPulsePeak: [1.0, 0.86, 0.56, 0.97],
-                bgColor: [0.98, 0.80, 0.47, 0.97],
-                menuOutlineThickness: 0.020, controlOutlineThickness: 0.010, rowOutlineThickness: 0.008,
-                cornerRoundness: 0.48,
-                rowButtonHeight: 0.072, rowButtonWidth: 0.74, rowButtonSpacing: 0.030,
-                disconnectButtonWidth: 0.60, titleWidth: 0.78, titleHeight: 0.082,
-                textColor: [0.06, 0.04, 0.01, 1], buttonColor: [1.0, 0.89, 0.63, 0.98],
-                buttonPressedColor: [0.94, 0.62, 0.12, 0.98],
-                textGradientEnabled: false, textGradientSpeed: 1.0,
-                textGradientDarkColor: [40, 22, 4], textGradientLightColor: [90, 50, 10],
-            },
-        },
-    ];
-
-    const DESIGN_CATEGORY_BUTTONS = MENU_DESIGNS.map(t =>
-        menuButton(t.name, () => mdApply(t), t.tip)
-    );
-    DESIGN_CATEGORY_BUTTONS.unshift(menuToggle("CRISP TEXT (TMP)", {
-        onEnable: () => {
-            _tmpTextEnabled = true; reloadMenu();
-            let ok = false;
-            try { ok = !!(tmpClass() && tmpFontAsset()); } catch (_) { }
-            sendNotification(ok ? "TMP text ON" : "TMP unavailable - using legacy text", !ok);
-            console.log("[Menu] TMP text ON  available=" + ok);
-        },
-        onDisable: () => { _tmpTextEnabled = false; reloadMenu(); sendNotification("legacy text", false); },
-        onUpdate: () => { },
-        toolTip: "Sharper TextMeshPro rendering instead of the old blurry UI text.",
-    }));
-    DESIGN_CATEGORY_BUTTONS.unshift(menuToggle("HAND POINTER", {
-        onEnable: () => { pointerEnabled = true; sendNotification("hand pointer ON", false); },
-        onDisable: () => {
-            pointerEnabled = false;
-            try { setPointerCursorVisible(false); } catch (_) { }
-            sendNotification("hand pointer OFF", false);
-        },
-        onUpdate: () => { },
-        toolTip: "Aim with your right hand and pull the trigger to click, instead of touching buttons.",
-    }));
-    DESIGN_CATEGORY_BUTTONS.unshift(menuToggle("TAB GRID LAYOUT", {
-        onEnable: () => { _gridMode = true; currentPage = 0; reloadMenu(); sendNotification("tab grid ON", false); },
-        onDisable: () => { _gridMode = false; currentPage = 0; reloadMenu(); sendNotification("tab grid OFF", false); },
-        onUpdate: () => { },
-        toolTip: "2-column checkbox grid layout instead of the stacked list.",
-    }));
-    DESIGN_CATEGORY_BUTTONS.push(menuButton("RESTORE DEFAULT", () => {
-        _gridMode = false;
-        shellLayout = false;
-        mdApply({ name: "DEFAULT", vars: {} });
-    }, "Put the menu back to its original look and layout."));
+    /* ================== RPC PROTECTION CATEGORY ================== */
     (function () {
         const SETTINGS_CAT = 10;
-        if (!buttons[SETTINGS_CAT]) {
-            mmAddCategory("Menu Design", DESIGN_CATEGORY_BUTTONS, "Menu skins and layout.");
-            return;
-        }
+        if (!buttons[SETTINGS_CAT]) return;
         const idx = buttons.length;
         buttons.push([]);
         const page = [new ButtonInfo(menuButton("Back to Settings", () => {
             currentCategory = SETTINGS_CAT; currentPage = 0; _pcMenuSelector = 0;
         }))];
-        for (const e of DESIGN_CATEGORY_BUTTONS) page.push(new ButtonInfo(e));
+        page.push(new ButtonInfo(menuButton("Block All", () => {
+            for (const g of RPC_GUARDS) _rpcBlocked[g.key] = true;
+            try { installRpcGuards(); } catch (_) { }
+            reloadMenu();
+            sendNotification("all RPCs blocked", false);
+        }, "Turn on every protection below.")));
+        page.push(new ButtonInfo(menuButton("Block None", () => {
+            for (const g of RPC_GUARDS) _rpcBlocked[g.key] = false;
+            reloadMenu();
+            sendNotification("all RPCs allowed", false);
+        }, "Turn off every protection below.")));
+        for (const g of RPC_GUARDS) {
+            const key = g.key, label = g.label;
+            const tip = "Drops incoming " + g.names.join(" / ") + " aimed at you."
+                + (g.session ? " This RPC is not bound to a player, so it is dropped for everyone; your own kicks still work." : "");
+            const btn = menuToggle("Block " + label, {
+                onEnable: () => {
+                    _rpcBlocked[key] = true;
+                    try { installRpcGuards(); } catch (_) { }
+                    sendNotification("blocking " + label, false);
+                },
+                onDisable: () => {
+                    _rpcBlocked[key] = false;
+                    sendNotification("allowing " + label, false);
+                },
+                onUpdate: () => { },
+                toolTip: tip,
+            });
+            const info = new ButtonInfo(btn);
+            info.enabled = !!_rpcBlocked[key];
+            page.push(info);
+        }
         buttons[idx] = page;
-        buttons[SETTINGS_CAT].push(new ButtonInfo(menuButton("Menu Design", () => {
+        buttons[SETTINGS_CAT].push(new ButtonInfo(menuButton("RPC Protection", () => {
             currentCategory = idx; currentPage = 0; _pcMenuSelector = 0;
-        }, "Menu skins, colors and layout.")));
+        }, "Pick which incoming RPCs get dropped. Fling and Kick are on by default.")));
     })();
     /* ================== END MENU DESIGNS ================== */
 
@@ -12540,6 +13211,94 @@ menuButton("Clear Trap List", () => {
         buttons[_enabledCategory] = page;
         try { rebuildButtonMap(); } catch (_) { }
     }
+    // favourites persist to a plain text file, one mod name per line
+    function favFilePath() {
+        try {
+            const env = Il2Cpp.corlib.class("System.Environment");
+            const home = env.method("GetFolderPath").invoke(40); // SpecialFolder.UserProfile
+            const base = home?.content;
+            if (!base) return null;
+            return base + "\\Downloads\\toast_favorites.txt";
+        }
+        catch (_) { return null; }
+    }
+    function favSave() {
+        try {
+            const p = favFilePath();
+            if (!p) return;
+            const body = globalThis.Array.from(_favorites).join("\r\n");
+            Il2Cpp.corlib.class("System.IO.File").method("WriteAllText", 2)
+                .invoke(Il2Cpp.string(p), Il2Cpp.string(body));
+        }
+        catch (_) { }
+    }
+    function favLoad() {
+        try {
+            const p = favFilePath();
+            if (!p) return;
+            const F = Il2Cpp.corlib.class("System.IO.File");
+            if (!F.method("Exists", 1).invoke(Il2Cpp.string(p))) return;
+            const txt = F.method("ReadAllText", 1).invoke(Il2Cpp.string(p))?.content || "";
+            _favorites = new Set(txt.split(/\r?\n/).map(s => s.trim()).filter(Boolean));
+        }
+        catch (_) { }
+    }
+    function rebuildFavoritesCategory() {
+        if (_favoritesCategory < 0) return;
+        const page = [
+            new ButtonInfo(menuButton("Back to Main", () => {
+                currentCategory = 0; currentPage = 0; _pcMenuSelector = 0;
+            })),
+        ];
+        const seen = new Set();
+        for (let ci = 0; ci < buttons.length; ci++) {
+            if (ci === _favoritesCategory || ci === _enabledCategory) continue;
+            const arr = buttons[ci] || [];
+            for (const b of arr) {
+                if (!b || !b.buttonText) continue;
+                const key = String(b.buttonText);
+                if (!_favorites.has(key) || seen.has(key)) continue;
+                seen.add(key);
+                const cap = b, catName = _catTitles[ci] || ("cat " + ci);
+                // proxy is never togglable itself - it drives the original, so
+                // the real mod keeps its own enabled state
+                const proxy = new ButtonInfo({
+                    buttonText: key,
+                    favKey: key,
+                    isTogglable: false,
+                    method: () => {
+                        try {
+                            if (cap.isTogglable) {
+                                cap.enabled = !cap.enabled;
+                                if (cap.enabled) cap.enableMethod?.();
+                                else cap.disableMethod?.();
+                            }
+                            else cap.method?.();
+                        }
+                        catch (_) { }
+                        rebuildFavoritesCategory();
+                        reloadMenu();
+                    },
+                    toolTip: "In " + catName + " - left grip + click to unfavorite.",
+                });
+                // updateButtonColor only looks at .enabled, so mirroring the
+                // original here gives the proxy the same pressed plate colour
+                proxy.enabled = !!b.enabled;
+                // .enabled is what updateButtonColor reads, but the update loop
+                // also dispatches anything enabled - without this flag the proxy
+                // would toggle the real mod every single frame
+                proxy.isProxy = true;
+                page.push(proxy);
+            }
+        }
+        if (page.length === 1) {
+            page.push(new ButtonInfo(menuButton("(no favorites yet)", () => { },
+                "Hold left grip and click any button to favorite it.")));
+        }
+        buttons[_favoritesCategory] = page;
+        _flatButtonsCache = null;
+        try { rebuildButtonMap(); } catch (_) { }
+    }
     (function () {
         _enabledCategory = buttons.length;
         buttons.push([]);
@@ -12566,8 +13325,211 @@ menuButton("Clear Trap List", () => {
         else {
             mainMenu.splice(1, 0, entry);
         }
+        // Favorites sits directly under Enabled Mods
+        _favoritesCategory = buttons.length;
+        buttons.push([]);
+        _catTitles[_favoritesCategory] = "Favorites";
+        categoryTitles[_favoritesCategory] = "Favorites";
+        try { favLoad(); } catch (_) { } // must precede the first rebuild
+        rebuildFavoritesCategory();
+        const favEntry = new ButtonInfo({
+            buttonText: "Favorites",
+            method: () => {
+                rebuildFavoritesCategory();
+                currentCategory = _favoritesCategory;
+                currentPage = 0;
+                _pcMenuSelector = 0;
+            },
+            isTogglable: false,
+            toolTip: "Your starred mods. Hold left grip and click any button to favorite it.",
+        });
+        const enabledIdx = mainMenu.findIndex((b) => b && b.buttonText === "Enabled Mods");
+        mainMenu.splice(enabledIdx >= 0 ? enabledIdx + 1 : 1, 0, favEntry);
     })();
     /* ================== END ENABLED MODS ================== */
+
+    /* ================== ORE SPAWNING ================== */
+    const ORE_LIST = [
+        { id: "item_ore_copper_s", name: "Copper (Small)" },
+        { id: "item_ore_copper_m", name: "Copper (Medium)" },
+        { id: "item_ore_copper_l", name: "Copper (Large)" },
+        { id: "item_ore_silver_s", name: "Silver (Small)" },
+        { id: "item_ore_silver_m", name: "Silver (Medium)" },
+        { id: "item_ore_silver_l", name: "Silver (Large)" },
+        { id: "item_ore_gold_s", name: "Gold (Small)" },
+        { id: "item_ore_gold_m", name: "Gold (Medium)" },
+        { id: "item_ore_gold_l", name: "Gold (Large)" },
+        { id: "item_ore_hell", name: "Hell Ore" },
+    ];
+    let _oreIndex = 0, _oreAmount = 1, _oreSpread = 0.25;
+    let _oreGunDelay = 0, _oreRainDelay = 0;
+    let _oreCategory = -1, _oreListCategory = -1;
+    function oreCurrent() { return ORE_LIST[_oreIndex] || ORE_LIST[0]; }
+    // scatter a little so a stack of ore doesn't spawn inside itself
+    function oreSpawnAt(pos, count) {
+        let n = 0;
+        try {
+            const base = readVec3Components(pos);
+            const id = oreCurrent().id;
+            for (let i = 0; i < Math.max(1, count); i++) {
+                try {
+                    const p = (count > 1)
+                        ? [base[0] + (Math.random() - 0.5) * _oreSpread,
+                           base[1] + 0.15 + Math.random() * _oreSpread,
+                           base[2] + (Math.random() - 0.5) * _oreSpread]
+                        : pos;
+                    const it = spawnItemAtPos(id, p, identityRotation);
+                    if (it && !it.isNull?.()) n++;
+                }
+                catch (_) { }
+            }
+        }
+        catch (_) { }
+        return n;
+    }
+    function oreSpawnAtGun(count) {
+        try {
+            const gd = omniRenderGun();
+            if (!gd || !gd.endPosition) return 0;
+            return oreSpawnAt(gd.endPosition, count);
+        }
+        catch (_) { return 0; }
+    }
+    function rebuildOreList() {
+        if (_oreListCategory < 0) { _oreListCategory = buttons.length; buttons.push([]); }
+        const page = [new ButtonInfo(menuButton("Back to Ore Spawning", () => {
+            rebuildOreCategory();
+            currentCategory = _oreCategory; currentPage = 0; _pcMenuSelector = 0;
+        }))];
+        for (let i = 0; i < ORE_LIST.length; i++) {
+            const idx = i;
+            const label = (i === _oreIndex ? "> " : "") + ORE_LIST[i].name;
+            page.push(new ButtonInfo(menuButton(label, () => {
+                _oreIndex = idx;
+                sendNotification("selected " + oreCurrent().name, false, 3);
+                rebuildOreList();
+                rebuildOreCategory();
+                reloadMenu();
+            }, ORE_LIST[i].id)));
+        }
+        buttons[_oreListCategory] = page;
+        try { rebuildButtonMap(); } catch (_) { }
+    }
+    function openOreList() {
+        rebuildOreList();
+        currentCategory = _oreListCategory; currentPage = 0; _pcMenuSelector = 0;
+        reloadMenu();
+    }
+    /* The two toggles are created once and reused. Rebuilding the page makes
+     * fresh ButtonInfos, which both lose their enabled state AND leave the
+     * update loop dispatching the old objects - that is why the gun rendered
+     * nothing and cycling ore silently switched it off. */
+    let _oreGunBtn = null, _oreRainBtn = null;
+    function oreGunButton() {
+        if (!_oreGunBtn) {
+            _oreGunBtn = new ButtonInfo(menuToggle("Ore Gun", {
+                onUpdate: () => {
+                    if (!rightGrab) return;
+                    const gd = omniRenderGun();
+                    if (!rightTrigger || !gd || !gd.endPosition) return;
+                    if (time <= _oreGunDelay) return;
+                    _oreGunDelay = time + 0.1;
+                    const n = oreSpawnAt(gd.endPosition, _oreAmount);
+                    if (n) sendNotification("spawned " + n + " " + oreCurrent().name, false, 2);
+                },
+                toolTip: "Hold grip + trigger to spawn the selected ore where you aim.",
+            }));
+        }
+        return _oreGunBtn;
+    }
+    function oreRainButton() {
+        if (!_oreRainBtn) {
+            _oreRainBtn = new ButtonInfo(menuToggle("Ore Rain", {
+                onUpdate: () => {
+                    if (!rightGrab) return;
+                    const gd = omniRenderGun();
+                    if (!gd || !gd.endPosition) return;
+                    if (time <= _oreRainDelay) return;
+                    _oreRainDelay = time + 0.12;
+                    oreSpawnAt(gd.endPosition, _oreAmount);
+                },
+                toolTip: "Hold grip only - streams ore continuously where you point.",
+            }));
+        }
+        return _oreRainBtn;
+    }
+    function rebuildOreCategory() {
+        if (_oreCategory < 0) return;
+        const page = [];
+        const add = (cfg) => page.push(new ButtonInfo(cfg));
+        add(menuButton("Back to Spawning", () => {
+            currentCategory = 5; currentPage = 0; _pcMenuSelector = 0;
+        }));
+        add(menuButton("Selected: " + oreCurrent().name, openOreList,
+            "Pick which ore to spawn (" + oreCurrent().id + ")."));
+        add(menuButton("Cycle Ore", () => {
+            _oreIndex = (_oreIndex + 1) % ORE_LIST.length;
+            sendNotification("selected " + oreCurrent().name, false, 3);
+            rebuildOreCategory();
+            reloadMenu();
+        }, "Step to the next ore in the list."));
+        add(menuStepper("Amount: " + _oreAmount, () => {
+            _oreAmount = _oreAmount <= 1 ? 25 : _oreAmount - 1;
+            rebuildOreCategory(); reloadMenu();
+        }, () => {
+            _oreAmount = _oreAmount >= 25 ? 1 : _oreAmount + 1;
+            rebuildOreCategory(); reloadMenu();
+        }, "How many ore each spawn drops (1-25)."));
+        page.push(oreGunButton());  // reused so it keeps its on/off state
+        page.push(oreRainButton());
+        add(menuButton("Spawn at Hand", () => {
+            try {
+                const hp = rightHandTransform.method("get_position").invoke();
+                const n = oreSpawnAt(hp, _oreAmount);
+                sendNotification("spawned " + n + " " + oreCurrent().name, false, 3);
+            }
+            catch (_) { }
+        }, "Drops the selected ore at your right hand."));
+        add(menuButton("Spawn One of Each", () => {
+            let n = 0;
+            try {
+                const gd = omniRenderGun();
+                const at = (gd && gd.endPosition)
+                    ? gd.endPosition
+                    : rightHandTransform.method("get_position").invoke();
+                const base = readVec3Components(at);
+                const keep = _oreIndex;
+                for (let i = 0; i < ORE_LIST.length; i++) {
+                    _oreIndex = i;
+                    n += oreSpawnAt([base[0] + (i - 4.5) * 0.22, base[1] + 0.2, base[2]], 1);
+                }
+                _oreIndex = keep;
+            }
+            catch (_) { }
+            sendNotification("spawned " + n + " ore", false, 3);
+        }, "Lays out one of every ore type in a row where you aim."));
+        buttons[_oreCategory] = page;
+        // the cache is never invalidated on its own - without this the loop
+        // keeps dispatching the previous page's objects
+        _flatButtonsCache = null;
+        try { rebuildButtonMap(); } catch (_) { }
+    }
+    (function () {
+        const SPAWN_CAT = 5; // "Spawning" on the main menu
+        _oreCategory = buttons.length;
+        buttons.push([]);
+        _catTitles[_oreCategory] = "Ore Spawning";
+        categoryTitles[_oreCategory] = "Ore Spawning";
+        rebuildOreCategory();
+        if (buttons[SPAWN_CAT]) {
+            buttons[SPAWN_CAT].push(new ButtonInfo(menuButton("Ore Spawning", () => {
+                rebuildOreCategory();
+                currentCategory = _oreCategory; currentPage = 0; _pcMenuSelector = 0;
+            }, "Cycle through ores and spawn them where the gun points.")));
+        }
+    })();
+    /* ================== END ORE SPAWNING ================== */
+
 
     searchCategoryIndex = buttons.length;
     buttons.push([]);
@@ -14203,4 +15165,687 @@ menuButton("Clear Trap List", () => {
 
     })();
     rebuildButtonMap();
+
+    /* ============================================================================
+     *  TOAST: Claim Everyone's Mining Rewards
+     *  Ported from toast.bat ("Claim Everyones Mining Rewards", Raid category).
+     *  Everything here is renamed for the Toast menu (toastRv* prefix); toast's
+     *  kH() toasts surface through the Toast menu's title-override display.
+     * ========================================================================== */
+    let ToastInt64Ctor = null;
+    try { ToastInt64Ctor = (typeof Int64 !== "undefined") ? Int64 : Il2Cpp.Int64; } catch (_) { }
+    function toastRvInt64(n) {
+        if (!ToastInt64Ctor) throw new Error("Int64 unavailable");
+        return new ToastInt64Ctor(n);
+    }
+    let toastRvBroadcastTries = 0, toastRvBroadcastAt = 0;
+    let toastRvBankCC = 0, toastRvBankRP = 0;
+    let toastRvPassClaimsAt = 0;
+    let toastRvPendingQuests = [];
+    const toastRvAsyncTasks = [];
+    let toastRvAsyncFallbackAt = 0;
+    let toastRvSelfCC = 0, toastRvSelfRP = 0;
+    let toastRvScanAt = 0, toastRvSelfRequestAt = 0;
+    const toastRvBossStates = new Map();
+
+    function toastRvTime() {
+        try { return Time.method("get_time").invoke(); } catch (_) { }
+        return time || 0;
+    }
+
+    function toastRvShow(text, seconds) {
+        try {
+            const clean = String(text ?? '').replace(/[^\x20-\x7E\n]/g, '');
+            if (!clean) return;
+            _titleOverrideText = clean;
+            _titleOverrideUntil = (time || 0) + (typeof seconds === "number" ? seconds : 5);
+            _titleOverrideActive = true;
+        } catch (_) { }
+    }
+
+    function toastRvNum(value) {
+        try { if (typeof value === "number") return value; } catch (_) { }
+        try { if (typeof value?.["value"] === "number") return value.value; } catch (_) { }
+        try { return Number(value.field("value__").value); } catch (_) { }
+        try { return Number(value); } catch (_) { }
+        return -1;
+    }
+
+    function toastRvGetValue(obj) {
+        if (!obj || obj.isNull?.()) return null;
+        try { return obj.method("get_value").invoke(); } catch (_) { }
+        try { return obj.method("get_Value").invoke(); } catch (_) { }
+        try { return obj.field("_value").value; } catch (_) { }
+        try { return obj.field("value").value; } catch (_) { }
+        try { return obj.field("<value>k__BackingField").value; } catch (_) { }
+        return null;
+    }
+
+    function toastRvTransform(obj) {
+        return obj.method("get_transform").invoke();
+    }
+
+    function toastRvGameObject(obj) {
+        try {
+            if (!obj || obj.isNull?.()) return null;
+            const go = obj.method("get_gameObject").invoke();
+            if (go && !go.isNull?.()) return go;
+        } catch (_) { }
+        return obj;
+    }
+
+    function toastRvFindMethod(obj, names, argc) {
+        for (const name of names) {
+            try {
+                return argc >= 0 ? obj.method(name, argc) : obj.method(name);
+            } catch (_) { }
+        }
+        return null;
+    }
+
+    function toastRvInvokeRaw(method, obj, ...args) {
+        return method.invokeRaw(obj, ...args);
+    }
+
+    function toastRvInvokeMethod(obj, names, argc, ...args) {
+        try {
+            if (!obj || obj.isNull?.()) return false;
+            for (const name of names) {
+                try {
+                    const m = argc >= 0 ? obj.class.method(name, argc) : obj.class.method(name);
+                    if (m) { toastRvInvokeRaw(m, obj, ...args); return true; }
+                } catch (_) { }
+                try {
+                    const m = argc >= 0 ? obj.method(name, argc) : obj.method(name);
+                    if (m) { m.invoke(...args); return true; }
+                } catch (_) { }
+            }
+        } catch (_) { }
+        return false;
+    }
+
+    function toastRvRequestOwnership(obj) {
+        try {
+            if (!obj || obj.isNull?.()) return;
+            toastRvInvokeMethod(obj, ['RequestStateAuthority', 'RequestInputAuthority', 'TakeOwnership', 'ClaimOwnership'], 0);
+            try {
+                const no = toastRvFindMethod(obj.class, ['get_Object', 'get_NetworkObject'], 0);
+                if (no) {
+                    const noObj = toastRvInvokeRaw(no, obj);
+                    if (noObj && !noObj.isNull?.())
+                        toastRvInvokeMethod(noObj, ['RequestStateAuthority', 'RequestInputAuthority', 'TakeOwnership', 'ClaimOwnership'], 0);
+                }
+            } catch (_) { }
+            try {
+                const runner = obj.method?.("get_Runner")?.invoke?.();
+                if (runner && !runner.isNull?.())
+                    toastRvInvokeMethod(runner, ['RequestStateAuthority', 'RequestInputAuthority'], 1, obj);
+            } catch (_) { }
+        } catch (_) { }
+    }
+
+    function toastRvFindObjectByType(cls) {
+        if (!cls) return null;
+        const object = cls.type.object;
+        try {
+            const found = UnityObjectCls.method("FindFirstObjectByType").overload("System.Type").invoke(object);
+            if (found && !found.isNull?.()) return found.cast(cls);
+        } catch (_) { }
+        try {
+            const found = UnityObjectCls.method("FindObjectOfType").overload("System.Type").invoke(object);
+            if (found && !found.isNull?.()) return found.cast(cls);
+        } catch (_) { }
+        try {
+            const found = UnityObjectCls.method("FindObjectsByType", 1).inflate(cls).invoke(0);
+            if (found && !found.isNull?.() && found.length > 0) {
+                const first = found.get ? found.get(0) : found[0];
+                if (first && !first.isNull?.()) return first.cast ? first.cast(cls) : first;
+            }
+        } catch (_) { }
+        return null;
+    }
+
+    function toastRvFindGiantControllers(cls) {
+        try { return UnityObjectCls.method("FindObjectsByType", 1).inflate(cls).invoke(0); } catch (_) { }
+        try { return UnityObjectCls.method("FindObjectsByType", 2).inflate(cls).invoke(0, 0); } catch (_) { }
+        return null;
+    }
+
+    function toastRvTriggerArgs() {
+        const worldEventTriggerArgsClass = acImage.class("AnimalCompany.WorldScript.WorldEventTriggerArgs");
+        const alloc = Memory.alloc(worldEventTriggerArgsClass.valueTypeSize);
+        alloc.writeByteArray(new Array(worldEventTriggerArgsClass.valueTypeSize).fill(0));
+        const valueType = new Il2Cpp.ValueType(alloc, worldEventTriggerArgsClass.type);
+        try {
+            const pos = (headCollider && !headCollider.isNull?.())
+                ? toastRvTransform(headCollider).method("get_position").invoke()
+                : Vector3Cls.field("zeroVector").value;
+            valueType.field("triggerPosition").value = pos;
+        } catch (_) { }
+        return valueType;
+    }
+
+    function toastRvBroadcastRewards() {
+        try {
+            const worldScriptManagerClass = acImage.class("AnimalCompany.WorldScript.WorldScriptManager");
+            const manager = worldScriptManagerClass.method("get_instance").invoke();
+            if (!manager || manager.isNull?.()) return false;
+            const loadedScripts = manager.field("_loadedScripts").value;
+            const script = loadedScripts.method("get_Item", 1).invoke(Il2Cpp.string("graveyard_boss"));
+            if (!script || script.isNull?.()) return false;
+            const behaviors = script.field("behaviors").value;
+            const behavior = behaviors.method("get_Item", 1).invoke(Il2Cpp.string("kill_boss"));
+            if (!behavior || behavior.isNull?.()) return false;
+            const flatSideEffects = script.field("flatSideEffects").value;
+            const sideEffects = flatSideEffects.method("get_Item", 1).invoke(behavior);
+            if (!sideEffects || sideEffects.isNull?.()) return false;
+            let hasCoins = false, hasRP = false, onlyRewardEffects = true;
+            const en = sideEffects.method("GetEnumerator").invoke();
+            while (en.method("MoveNext").invoke()) {
+                const effect = en.method("get_Current").invoke();
+                if (!effect || effect.isNull?.()) continue;
+                const typeName = String(effect.class?.["type"]?.["name"] || effect.class?.["name"] || '');
+                if (/AwardDailyCoins$/i.test(typeName)) hasCoins = true;
+                if (/AwardDailyRP$/i.test(typeName)) hasRP = true;
+                if (!/(AwardDailyCoins|AwardDailyRP|CompleteQuest|CompleteQuestStep)$/i.test(typeName)) onlyRewardEffects = false;
+            }
+            if (!hasCoins || !hasRP || !onlyRewardEffects) return false;
+            const sync = behavior.method("get_sync").invoke();
+            if (!sync || sync.isNull?.()) return false;
+            const syncTypeField = sync.field("syncType");
+            const originalSyncType = syncTypeField.value;
+            const syncToAll = acImage.class("AnimalCompany.WorldScript.EventCompleteSyncType").field("SyncToAllPlayers").value;
+            try {
+                syncTypeField.value = syncToAll;
+                behavior.method("Trigger", 1).invoke(toastRvTriggerArgs());
+                try {
+                    const onTriggerArgsClass = acImage.class("AnimalCompany.WorldScript.OnWorldEventTriggerArgs");
+                    const alloc = Memory.alloc(onTriggerArgsClass.valueTypeSize);
+                    alloc.writeByteArray(new Array(onTriggerArgsClass.valueTypeSize).fill(0));
+                    const valueType = new Il2Cpp.ValueType(alloc, onTriggerArgsClass.type);
+                    valueType.field("firstTimeTriggeringEvent").value = true;
+                    valueType.field("completedArgs").value = toastRvTriggerArgs();
+                    valueType.field("isNetSyncCompletion").value = true;
+                    const effectEn = sideEffects.method("GetEnumerator").invoke();
+                    let activated = 0;
+                    while (effectEn.method("MoveNext").invoke()) {
+                        const effect = effectEn.method("get_Current").invoke();
+                        if (!effect || effect.isNull?.()) continue;
+                        try {
+                            effect.method("Activate", 1).invoke(valueType);
+                            activated++;
+                        } catch (err) {
+                            console.error("[Rewards] Local " + String(effect.class?.["name"] || "effect") + " failed: " + err);
+                        }
+                    }
+                    console.log("[Rewards] Activated " + activated + " net-synced Graveyard reward effect(s) for self");
+                } catch (err) {
+                    console.error("[Rewards] Local Graveyard reward activation failed: " + err);
+                }
+            } finally {
+                try { syncTypeField.value = originalSyncType; } catch (_) { }
+            }
+            return true;
+        } catch (err) {
+            console.error("[RP] Exact Graveyard boss reward broadcast failed: " + err);
+            return false;
+        }
+    }
+
+    function toastRvAwardDailyRP() {
+        try {
+            const awardDailyRPNodeClass = acImage.class("AnimalCompany.WorldScript.AwardDailyRPNode");
+            const awardDailyRPClass = acImage.class("AnimalCompany.WorldScript.AwardDailyRP");
+            const node = awardDailyRPNodeClass.alloc();
+            try { node.method(".ctor", 0).invoke(); } catch (_) { node.method(".ctor").invoke(); }
+            const action = awardDailyRPClass.alloc();
+            action.method(".ctor", 1).invoke(node);
+            action.method("OnActivate", 1).invoke(toastRvTriggerArgs());
+            return true;
+        } catch (err) {
+            console.error("[RP] Direct AwardDailyRP failed: " + err);
+            return false;
+        }
+    }
+
+    function toastRvExecuteAction(action) {
+        try {
+            if (!action || action.isNull?.()) return false;
+            const baseActionClass = acImage.class("AnimalCompany.BaseAction");
+            const array = Il2Cpp.array(baseActionClass, [action]);
+            if (!array || array.isNull?.()) return false;
+            const appClass = acImage.class("AnimalCompany.App");
+            let target = null;
+            for (const m of appClass.methods || []) {
+                try {
+                    if (String(m.name) !== "ExecuteActionOrDelay" || m.parameterCount !== 1) continue;
+                    const ptype = String(m.parameters[0]?.["type"]?.["name"] || '');
+                    if (ptype.indexOf("BaseAction[]") >= 0) { target = m; break; }
+                } catch (_) { }
+            }
+            if (!target) throw new Error("App.ExecuteActionOrDelay(BaseAction[]) unavailable");
+            target.invoke(array);
+            return true;
+        } catch (err) {
+            console.error("[Rewards] App action dispatch failed: " + err);
+            return false;
+        }
+    }
+
+    function toastRvFlushPass() {
+        try {
+            const passManagerClass = acImage.class("AnimalCompany.AdventurePassManager");
+            const manager = toastRvFindObjectByType(passManagerClass);
+            if (!manager || manager.isNull?.()) return false;
+            try { manager.field("_lastFlushTime").value = -100000; } catch (_) { }
+            manager.method("TryStartFlush", 0).invoke();
+            return true;
+        } catch (err) {
+            console.error("[XP] Adventure Pass flush failed: " + err);
+            return false;
+        }
+    }
+
+    function toastRvQueueXp() {
+        const result = { queued: false, points: 0, questID: '', quests: 0 };
+        let stage = "get app state";
+        try {
+            const appState = acImage.class("AnimalCompany.App").method("get_state").invoke();
+            if (!appState || appState.isNull?.()) return result;
+            stage = "get Adventure Pass";
+            const pass = appState.method("get_adventurePass").invoke();
+            if (!pass || pass.isNull?.()) return result;
+            stage = "get quests";
+            const quests = pass.method("get_quests").invoke();
+            if (!quests || quests.isNull?.()) return result;
+            stage = "enumerate quests";
+            const en = quests.method("get_Values").invoke().method("GetEnumerator").invoke();
+            while (en.method("MoveNext").invoke()) {
+                stage = "read quest";
+                const quest = en.method("get_Current").invoke();
+                if (!quest || quest.isNull?.()) continue;
+                let questID = '';
+                try { questID = String(quest.method("get_questID").invoke()?.["content"] || ''); } catch (_) { }
+                if (!questID) continue;
+                let curr = 0, goal = 0, points = 0;
+                try { curr = Number(toastRvGetValue(quest.method("get_currProgress").invoke()) || 0); } catch (_) { }
+                try { goal = Number(toastRvGetValue(quest.method("get_completionGoal").invoke()) || 0); } catch (_) { }
+                try { points = Number(toastRvGetValue(quest.method("get_points").invoke()) || 0); } catch (_) { }
+                if (goal <= 0 || curr >= goal) continue;
+                const amount = Math.max(1, goal - curr);
+                stage = "apply quest progress";
+                const actionCls = acImage.class("AnimalCompany.IncrementAdventurePassQuestProgressAction");
+                const action = actionCls.alloc();
+                action.method(".ctor", 2).invoke(Il2Cpp.string(questID), amount);
+                if (!toastRvExecuteAction(action)) continue;
+                stage = "mark quest dirty";
+                acImage.class("AnimalCompany.AdventurePassManager").method("MarkDirty", 1).invoke(Il2Cpp.string(questID));
+                result.queued = true;
+                result.points += Math.max(0, points);
+                result.quests++;
+                if (!result.questID) result.questID = questID;
+                toastRvPendingQuests = toastRvPendingQuests.filter((q) => q.questID !== questID);
+                toastRvPendingQuests.push({ questID, goal, tries: 4, nextCheck: toastRvTime() + 7 });
+            }
+            if (result.queued) {
+                console.log("[XP] Queued " + result.quests + " quest(s), " + result.points + " Adventure Pass XP; server flush=" + (toastRvFlushPass() ? "started" : "normal timer"));
+            } else {
+                console.log("[XP] No incomplete active Adventure Pass quests were found");
+            }
+        } catch (err) {
+            console.error("[XP] Adventure Pass XP request failed at " + stage + ': ' + err);
+        }
+        return result;
+    }
+
+    function toastRvClaimPass() {
+        const result = { claims: 0, coins: 0, rp: 0 };
+        try {
+            const appState = acImage.class("AnimalCompany.App").method("get_state").invoke();
+            if (!appState || appState.isNull?.()) return result;
+            const pass = appState.method("get_adventurePass").invoke();
+            if (!pass || pass.isNull?.()) return result;
+            const level = Math.max(0, Number(toastRvGetValue(pass.method("get_currentLevel").invoke()) || 0));
+            const premiumActive = !!toastRvGetValue(pass.method("get_premiumActive").invoke());
+            const claimedLevels = pass.method("get_claimedLevels").invoke();
+            const rewards = pass.method("get_rewards").invoke();
+            const en = rewards.method("get_Values").invoke().method("GetEnumerator").invoke();
+            while (en.method("MoveNext").invoke()) {
+                const reward = en.method("get_Current").invoke();
+                if (!reward || reward.isNull?.()) continue;
+                const rewardLevel = Number(reward.method("get_level").invoke() || 0);
+                if (rewardLevel <= 0 || rewardLevel > level) continue;
+                let alreadyClaimed = false;
+                try { alreadyClaimed = !!claimedLevels.method("Contains", 1).invoke(rewardLevel); } catch (_) { }
+                if (alreadyClaimed) continue;
+                const isPremium = !!toastRvGetValue(reward.method("get_isPremium").invoke());
+                if (isPremium && !premiumActive) continue;
+                const coins = Math.max(0, Number(toastRvGetValue(reward.method("get_rewardHard").invoke()) || 0));
+                const rp = Math.max(0, Number(toastRvGetValue(reward.method("get_rewardResearchPoints").invoke()) || 0));
+                if (coins <= 0 && rp <= 0) continue;
+                const cmdCls = acImage.class("AnimalCompany.ClaimAdventurePassRewardCommand");
+                const cmd = cmdCls.alloc();
+                cmd.method(".ctor", 1).invoke(rewardLevel);
+                acImage.class("AnimalCompany.App").method("ExecuteCommand", 2).invoke(cmd, true);
+                result.claims++;
+                result.coins += coins;
+                result.rp += rp;
+            }
+        } catch (err) {
+            console.error("[Rewards] Adventure Pass currency claim failed: " + err);
+        }
+        return result;
+    }
+
+    function toastRvCollectServerBanked(silent) {
+        try {
+            const appState = acImage.class("AnimalCompany.App").method("get_state").invoke();
+            if (!appState || appState.isNull?.()) return false;
+            const user = appState.method("get_user").invoke();
+            const bank = user.method("get_miningBankedBalance").invoke();
+            const cc = Math.max(0, Math.floor(Number(toastRvGetValue(bank.method("get_hardCurrencyBanked").invoke()) || 0)));
+            const rp = Math.max(0, Math.floor(Number(toastRvGetValue(bank.method("get_researchPointsBanked").invoke()) || 0)));
+            toastRvBankCC = cc; toastRvBankRP = rp;
+            const min = Math.min(25, cc);
+            const min2 = Math.min(1, rp);
+            if (min <= 0 && min2 <= 0) {
+                if (!silent) console.log("[Rewards] Waiting for server-backed Graveyard CC/RP");
+                return false;
+            }
+            acImage.class("AnimalCompany.MiningRewardManager").method("CollectMiningReward", 3).invoke(toastRvInt64(min), toastRvInt64(min2), Il2Cpp.string("graveyard_boss/kill_boss"));
+            if (!silent) console.log("[Rewards] Collecting server-backed Graveyard reward: " + min + " CC + " + min2 + " RP");
+            return true;
+        } catch (err) {
+            console.error("[RP] RP + company-coin reward request failed: " + err);
+            return false;
+        }
+    }
+
+    function toastRvReadWallet() {
+        const result = { cc: 0, rp: 0 };
+        try {
+            const appState = acImage.class("AnimalCompany.App").method("get_state").invoke();
+            if (!appState || appState.isNull?.()) return result;
+            const user = appState.method("get_user").invoke();
+            const wallet = user.method("get_wallet").invoke();
+            result.cc = Math.max(0, Number(toastRvGetValue(wallet.method("get_hardCurrency").invoke()) || 0));
+            result.rp = Math.max(0, Number(toastRvGetValue(wallet.method("get_researchPoints").invoke()) || 0));
+        } catch (_) { }
+        return result;
+    }
+
+    function toastRvTaskError(task) {
+        try {
+            const exception = task.method("get_Exception").invoke();
+            if (exception && !exception.isNull?.()) {
+                try { return String(exception.method("get_Message").invoke()?.["content"] || "server rejected request"); } catch (_) { }
+            }
+        } catch (_) { }
+        return "server rejected request";
+    }
+
+    function toastRvSubmitAsync(cc, rp, reason) {
+        try {
+            const appClass = acImage.class("AnimalCompany.App");
+            const apiCls = acImage.class("AnimalCompany.API.AnimalCompanyAPI");
+            let api = null, session = null;
+            try { api = appClass.method("get_api").invoke(); } catch (_) { }
+            try { session = appClass.method("get_apiSession").invoke(); } catch (_) { }
+            if (!api || api.isNull?.()) api = apiCls.method("get_instance").invoke();
+            if (!session || session.isNull?.()) session = apiCls.method("get_session").invoke();
+            if (!api || api.isNull?.() || !session || session.isNull?.()) return false;
+            const array = Il2Cpp.array(Il2Cpp.corlib.class("System.String"), [Il2Cpp.string(reason)]);
+            const none = Il2Cpp.corlib.class("System.Threading.CancellationToken").method("get_None").invoke();
+            const overload = apiCls.method("CollectMiningRewardAsync", 5).overload("Nakama.ISession", "System.Int64", "System.Int64", "System.String[]", "System.Threading.CancellationToken");
+            const task = overload.bind(api).invoke(session, toastRvInt64(cc), toastRvInt64(rp), array, none);
+            if (!task || task.isNull?.()) return false;
+            toastRvAsyncTasks.push({ task, startedAt: toastRvTime(), hardCurrency: cc, researchPoints: rp });
+            console.log("[Rewards/Async] CollectMiningRewardAsync submitted: " + cc + " CC + " + rp + " RP");
+            return true;
+        } catch (err) {
+            console.error("[Rewards/Async] CollectMiningRewardAsync setup failed: " + err);
+            return false;
+        }
+    }
+
+    function toastRvAsyncPoll() {
+        const now = toastRvTime();
+        if (toastRvAsyncFallbackAt > 0 && now >= toastRvAsyncFallbackAt) {
+            toastRvAsyncFallbackAt = 0;
+            const wallet = toastRvReadWallet();
+            if (wallet.cc > toastRvSelfCC || wallet.rp > toastRvSelfRP) {
+                console.log("[Rewards/Async] Normal Graveyard request already updated the server wallet; async fallback skipped");
+            } else if (!toastRvSubmitAsync(25, 1, "graveyard_boss/kill_boss")) {
+                toastRvShow("CC/RP async fallback could not start", 5);
+            }
+        }
+        for (let i = toastRvAsyncTasks.length - 1; i >= 0; i--) {
+            const entry = toastRvAsyncTasks[i];
+            try {
+                if (now - entry.startedAt > 35) {
+                    console.log("[Rewards/Async] CollectMiningRewardAsync timed out");
+                    toastRvAsyncTasks.splice(i, 1);
+                    continue;
+                }
+                if (!entry.task.method("get_IsCompleted").invoke()) continue;
+                if (entry.task.method("get_IsCanceled").invoke() || entry.task.method("get_IsFaulted").invoke()) {
+                    const errText = toastRvTaskError(entry.task);
+                    console.log("[Rewards/Async] Request failed: " + errText);
+                    toastRvShow("CC/RP async rejected: " + errText, 5);
+                    toastRvAsyncTasks.splice(i, 1);
+                    continue;
+                }
+                const result = entry.task.method("get_Result").invoke();
+                const succeeded = !!result.field("succeeded").value;
+                const errorCode = toastRvNum(result.field("errorCode").value);
+                if (!succeeded) {
+                    console.log("[Rewards/Async] Server response rejected request; errorCode=" + errorCode);
+                    toastRvShow("CC/RP async rejected by server (" + errorCode + ")", 5);
+                    toastRvAsyncTasks.splice(i, 1);
+                    continue;
+                }
+                const appState = acImage.class("AnimalCompany.App").method("get_state").invoke();
+                try {
+                    const walletActionCls = acImage.class("AnimalCompany.UpdateUserWalletAction");
+                    const wa = walletActionCls.alloc();
+                    wa.method(".ctor", 2).invoke(result.field("wallet").value, false);
+                    if (!toastRvExecuteAction(wa)) wa.method("Execute", 1).invoke(appState);
+                } catch (err) {
+                    console.error("[Rewards/Async] Wallet response apply failed: " + err);
+                }
+                try {
+                    const bankActionCls = acImage.class("AnimalCompany.UpdateUserMiningBankedBalanceAction");
+                    const ba = bankActionCls.alloc();
+                    ba.method(".ctor", 1).invoke(result.field("balance").value);
+                    if (!toastRvExecuteAction(ba)) ba.method("Execute", 1).invoke(appState);
+                } catch (err) {
+                    console.error("[Rewards/Async] Bank response apply failed: " + err);
+                }
+                console.log("[Rewards/Async] Server accepted CollectMiningRewardAsync");
+                toastRvShow("Server accepted async CC/RP reward", 5);
+                toastRvAsyncTasks.splice(i, 1);
+            } catch (err) {
+                console.error("[Rewards/Async] Result check failed: " + err);
+                toastRvAsyncTasks.splice(i, 1);
+            }
+        }
+    }
+
+    function toastRvSelfRequest() {
+        try {
+            if (toastRvCollectServerBanked(true)) {
+                console.log("[Rewards] Graveyard defeat collected an existing server CC/RP bank");
+                toastRvShow("Graveyard defeat: server CC/RP collection sent", 5);
+                return true;
+            }
+            const wallet = toastRvReadWallet();
+            acImage.class("AnimalCompany.MiningRewardManager").method("CollectMiningReward", 3).invoke(toastRvInt64(25), toastRvInt64(1), Il2Cpp.string("graveyard_boss/kill_boss"));
+            toastRvSelfCC = wallet.cc; toastRvSelfRP = wallet.rp;
+            toastRvAsyncFallbackAt = toastRvTime() + 4;
+            console.log("[Rewards] Graveyard defeat self request sent: 25 CC + 1 RP (no local balance spoof)");
+            toastRvShow("Graveyard defeated: requested 25 CC + 1 RP for you", 5);
+            return true;
+        } catch (err) {
+            console.error("[Rewards] Graveyard defeat self request failed: " + err);
+            toastRvShow("Graveyard defeated: self CC/RP request failed", 5);
+            return false;
+        }
+    }
+
+    function toastRvDeathScan() {
+        const now = toastRvTime();
+        if (toastRvSelfRequestAt > 0 && now >= toastRvSelfRequestAt) {
+            toastRvSelfRequestAt = 0;
+            toastRvSelfRequest();
+        }
+        if (now < toastRvScanAt) return;
+        toastRvScanAt = now + 0.5;
+        try {
+            const giantControllerClass = acImage.class("AnimalCompany.GiantController");
+            const list = toastRvFindGiantControllers(giantControllerClass);
+            const seen = new Set();
+            if (list) for (let i = 0; i < list.length; i++) {
+                try {
+                    const gc = list.get ? list.get(i) : list[i];
+                    if (!gc || gc.isNull?.()) continue;
+                    let isBoss = false;
+                    try {
+                        const mobData = gc.method("get_mobData").invoke();
+                        if (mobData && !mobData.isNull?.()) {
+                            let mobID = -1;
+                            try { mobID = toastRvNum(mobData.method("get_mobID").invoke()); } catch (_) { mobID = toastRvNum(mobData.field("mobID").value); }
+                            isBoss = mobID === 32;
+                        }
+                    } catch (_) { }
+                    if (!isBoss) try {
+                        const name = String(toastRvGameObject(gc)?.["method"]("get_name")["invoke"]()?.["content"] || '');
+                        isBoss = /graveyardboss|graveyard_boss/i.test(name);
+                    } catch (_) { }
+                    if (!isBoss) continue;
+                    const key = String(gc.handle);
+                    seen.add(key);
+                    let dead = false;
+                    try { dead = !!gc.method("get_n_isDie").invoke(); } catch (_) {
+                        try { dead = toastRvNum(gc.method("get_phase").invoke()) === 6; } catch (_) { }
+                    }
+                    const wasDead = toastRvBossStates.get(key) === true;
+                    toastRvBossStates.set(key, dead);
+                    if (dead && !wasDead) {
+                        toastRvSelfRequestAt = now + 1.5;
+                        console.log("[Rewards] GraveyardBoss death detected; self CC/RP request scheduled");
+                    }
+                } catch (_) { }
+            }
+            for (const key of toastRvBossStates.keys()) {
+                if (!seen.has(key)) toastRvBossStates.delete(key);
+            }
+        } catch (err) {
+            console.error("[Rewards] Graveyard boss death scan failed: " + err);
+        }
+    }
+
+    function toastRvTick() {
+        const now = toastRvTime();
+        toastRvAsyncPoll();
+        if (toastRvBroadcastTries > 0 && now >= toastRvBroadcastAt) {
+            if (toastRvCollectServerBanked(true)) {
+                toastRvBroadcastTries = 0;
+                toastRvShow("Server-backed Company Coins / RP collection sent", 5);
+            } else {
+                toastRvBroadcastTries--;
+                toastRvBroadcastAt = now + 1;
+                if (toastRvBroadcastTries === 0) {
+                    console.log("[Rewards] Your server mining bank stayed at CC=" + toastRvBankCC + " RP=" + toastRvBankRP + "; the peer broadcast can only collect rewards already banked on each account");
+                    toastRvShow("Your server CC/RP bank is empty; no self reward was available", 5);
+                }
+            }
+        }
+        if (toastRvPassClaimsAt > 0 && now >= toastRvPassClaimsAt) {
+            toastRvPassClaimsAt = 0;
+            const claims = toastRvClaimPass();
+            if (claims.claims > 0) toastRvShow("Adventure Pass claims sent: " + claims.coins + " CC + " + claims.rp + " RP", 5);
+        }
+        let confirmed = 0, rejected = 0;
+        for (let i = toastRvPendingQuests.length - 1; i >= 0; i--) {
+            const q = toastRvPendingQuests[i];
+            if (now < q.nextCheck) continue;
+            let confirmedProgress = -1;
+            try { confirmedProgress = Number(acImage.class("AnimalCompany.AdventurePassManager").method("GetLastConfirmedProgress", 1).invoke(Il2Cpp.string(q.questID))); } catch (_) { }
+            if (confirmedProgress >= q.goal) {
+                console.log("[XP] Server confirmed quest " + q.questID + " at " + confirmedProgress + "/" + q.goal);
+                toastRvPendingQuests.splice(i, 1);
+                confirmed++;
+                continue;
+            }
+            q.tries--;
+            if (q.tries <= 0) {
+                console.log("[XP] Server did not confirm quest " + q.questID + " (confirmed=" + confirmedProgress + ", goal=" + q.goal + ")");
+                toastRvPendingQuests.splice(i, 1);
+                rejected++;
+            } else {
+                q.nextCheck = now + 3;
+            }
+        }
+        if (confirmed > 0) toastRvShow("XP server-confirmed for " + confirmed + " quest(s)", 5);
+        if (rejected > 0) toastRvShow("XP was not accepted for " + rejected + " quest(s)", 5);
+    }
+
+    function toastRvClaimEveryonesMiningRewards() {
+        const xp = toastRvQueueXp();
+        const pass = toastRvClaimPass();
+        if (xp.queued) toastRvPassClaimsAt = toastRvTime() + 5;
+        const tail = xp.queued ? " + " + xp.quests + " quest(s) / " + xp.points + " XP queued" : " + no incomplete XP quests";
+        const claimed = pass.claims > 0 ? " + " + pass.claims + " Adventure Pass reward(s) claimed" : '';
+        if (toastRvBroadcastRewards()) {
+            const sent = toastRvCollectServerBanked(false);
+            if (!sent) { toastRvBroadcastTries = 12; toastRvBroadcastAt = toastRvTime() + 1; }
+            toastRvShow(sent ? "Rewards: Server CC/RP collection sent" + tail + claimed : "Rewards: Boss broadcast; waiting for server CC/RP" + tail + claimed, 5);
+            return;
+        }
+        let killed = 0;
+        try {
+            const giantControllerClass = acImage.class("AnimalCompany.GiantController");
+            const list = toastRvFindGiantControllers(giantControllerClass);
+            if (list) for (let i = 0; i < list.length; i++) {
+                try {
+                    const gc = list.get ? list.get(i) : list[i];
+                    if (!gc || gc.isNull?.()) continue;
+                    let isBoss = false;
+                    try {
+                        const name = String(toastRvGameObject(gc)?.["method"]("get_name")["invoke"]()?.["content"] || '');
+                        if (/graveyardboss|graveyard_boss/i.test(name)) isBoss = true;
+                    } catch (_) { }
+                    try {
+                        const mobData = gc.method("get_mobData").invoke();
+                        if (mobData && !mobData.isNull?.() && toastRvNum(mobData.field("mobID").value) === 32) isBoss = true;
+                    } catch (_) { }
+                    if (!isBoss) continue;
+                    try { if (gc.method("get_n_isDie").invoke()) continue; } catch (_) { }
+                    try { toastRvRequestOwnership(gc); } catch (_) { }
+                    let hit = false;
+                    try {
+                        const pos = toastRvTransform(toastRvGameObject(gc) || gc).method("get_position").invoke();
+                        gc.method("HandleHit", 4).invoke(2147483647, pos, true, 0);
+                        hit = true;
+                    } catch (_) { }
+                    if (!hit) try { gc.method("HandleDie", 0).invoke(); hit = true; } catch (_) { }
+                    if (hit) killed++;
+                } catch (_) { }
+            }
+        } catch (err) {
+            console.error("[RP] Graveyard boss lookup failed: " + err);
+        }
+        if (killed === 0) {
+            toastRvShow("XP: " + (xp.queued ? xp.quests + " quest(s) / " + xp.points + " XP queued" : "no incomplete quests") + ". Enter Graveyard for RP/CC" + claimed, 5);
+            return;
+        }
+        const sent = toastRvCollectServerBanked(false);
+        if (!sent) { toastRvAwardDailyRP(); toastRvBroadcastTries = 12; toastRvBroadcastAt = toastRvTime() + 1; }
+        toastRvShow(sent ? "Rewards: Boss defeated; server CC/RP action sent" + tail + claimed : "Rewards: Boss defeated; waiting for server CC/RP" + tail + claimed, 5);
+    }
+
+    function toastRewardsTick() {
+        try { toastRvDeathScan(); } catch (_) { }
+        try { toastRvTick(); } catch (_) { }
+    }
 });
