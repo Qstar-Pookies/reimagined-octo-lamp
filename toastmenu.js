@@ -1,6 +1,3 @@
-// Silence every console channel before anything else runs. This is patched on
-// globalThis rather than shadowed with a local binding so it also covers the
-// il2cpp bridge, which calls globalThis.console.log directly.
 try {
     const _noop = function () { };
     for (const _k of ["log", "error", "warn", "info", "debug", "trace", "dir", "table", "group", "groupEnd", "count", "time", "timeEnd", "assert"]) {
